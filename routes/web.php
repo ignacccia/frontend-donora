@@ -1,0 +1,73 @@
+<?php
+
+use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
+use App\Htttp\Livewire\AjuanDarah;
+
+Route::get('/', function () {
+    return view('welcome');
+});
+Route::get('/test', function () {
+    return view('livewire.test');
+});
+Route::get('/daftar', function () {
+    return view('livewire.daftar');
+});
+Route::get('/masuk', function () {
+    return view('livewire.masuk');
+})->name('login');
+Route::get('/stok-darah', function () {
+    $currentPage = 'stok-darah';
+    return view('livewire.stok-darah', compact('currentPage'));
+});
+Route::get('/ajuan-darah', function () {
+    $currentPage = 'ajuan-darah';
+    return view('livewire.ajuan-darah', compact('currentPage'));
+});
+Route::get('/dashboard', function () {
+    $currentPage = 'dashboard';
+    return view('livewire.dashboard', compact('currentPage'));
+});
+Route::get('/klaim-hadiah', function () {
+    $currentPage = 'klaim-hadiah';
+    return view('livewire.klaim-hadiah', compact('currentPage'));
+});
+Route::get('/reset-pass', function (Request $request) {
+    $email = $request->query('email');
+    return view('livewire.reset-pass', compact('email'));
+});
+Route::get('/otp', function (Request $request) {
+    $email = $request->query('email');
+    if (!$email) {
+        return redirect('/reset-pass');
+    }
+    return view('livewire.otp', compact('email'));
+});
+Route::get('/notifikasi', function () {
+    $currentPage = 'notifikasi';
+    return view('livewire.notifikasi', compact('currentPage'));
+});
+Route::get('/jadwal-donor', function () {
+    $currentPage = 'jadwal-donor';
+    return view('livewire.jadwal-donor', compact('currentPage'));
+});
+Route::get('/riwayat-ajuan', function () {
+    $currentPage = 'riwayat-ajuan';
+    return view('livewire.riwayat-ajuan', compact('currentPage'));
+});
+Route::get('/akun', function () {
+    $currentPage = 'akun';
+    return view('livewire.akun', compact('currentPage'));
+});
+Route::get('/konfirm-pass', function () {
+    return view('livewire.konfirm-pass');
+});
+Route::get('/poin', function () {
+    $currentPage = 'poin';
+    return view('livewire.poin', compact('currentPage'));
+    return view('livewire.poin');
+});
+Route::get('/riwayat-donor', function () {
+    $currentPage = 'riwayat-donor';
+    return view('livewire.riwayat-donor', compact('currentPage'));
+});
