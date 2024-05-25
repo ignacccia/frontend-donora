@@ -2,20 +2,22 @@
 
 @section('content')
 <div class="bg-white rounded-2xl p-6 mt-4 flex flex-col shadow-lg z-10 h-full">
+    <p class="font-semibold text-3xl text-[#172B4D] drop-shadow">Leadeboard Poin</p>
+
     <div class="flex items-end ">
         <div class="flex flex-col items-center space-y-2">
             <div class="text-lg font-semibold">User 2</div>
-            <div id="bar2" class="bg-red-500 w-10 bar" style="height: 0;"></div>
+            <div id="bar2" class="bg-red-700 w-10 bar" style="height: 0;"></div>
             <div id="points2" class="text-lg font-semibold">0</div>
         </div>
         <div class="flex flex-col items-center space-y-2">
             <div class="text-lg font-semibold">User 1</div>
-            <div id="bar1" class="bg-red-500 w-10 bar" style="height: 0;"></div>
+            <div id="bar1" class="bg-red-700 w-10 bar" style="height: 0;"></div>
             <div id="points1" class="text-lg font-semibold">0</div>
         </div>
         <div class="flex flex-col items-center space-y-2">
             <div class="text-lg font-semibold">User 3</div>
-            <div id="bar3" class="bg-red-500 w-10 bar" style="height: 0;"></div>
+            <div id="bar3" class="bg-red-700 w-10 bar" style="height: 0;"></div>
             <div id="points3" class="text-lg font-semibold">0</div>
         </div>
     </div>

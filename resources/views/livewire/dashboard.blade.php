@@ -11,10 +11,11 @@
                 </lord-icon>
                 <div class="ml-3 mt-3">
                     <p class="font-bold text-2xl">Stok Darah</p>
-                    <p class="">Di Surabaya Per Mei 2024</p>
+                    <p class="">Di <span class="regency_name"></span> Per
+                        {{ \Carbon\Carbon::now()->locale('id')->isoFormat('MMMM YYYY') }}</p>
                 </div>
             </div>
-            <p class="font-bold text-4xl ml-3 mt-2 drop-shadow-lg">2190 Kantong</p>
+            <p class="font-bold text-4xl ml-3 mt-2 drop-shadow-lg"> <span id="blood_stocks"></span> Kantong</p>
         </div>
 
         <div class="bg-white w-1/2 p-10 rounded-3xl drop-shadow-xl shadom-md text-[#be2929]" href="">
@@ -24,10 +25,11 @@
                 </lord-icon>
                 <div class="ml-3 mt-3">
                     <p class="font-bold  text-2xl">Jadwal Donor</p>
-                    <p class="">Di Surabaya Per Mei 2024</p>
+                    <p class="">Di <span class="regency_name"></span> Per
+                        {{ \Carbon\Carbon::now()->locale('id')->isoFormat('MMMM YYYY') }}</p>
                 </div>
             </div>
-            <p class="font-bold text-[#be2929] text-4xl ml-3 mt-2">11 Agenda</p>
+            <p class="font-bold text-[#be2929] text-4xl ml-3 mt-2"><span id="donor_schedules"></span> Agenda</p>
         </div>
     </div>
 
@@ -43,10 +45,16 @@
                 </div>
             </div>
 
-            <div class="mt-3 flex font-bold">
-                <p class="pr-2 border-r-2 border-[#be2929]">Dalam Proses: 1</p>
-                <p class="pl-2 pr-2 border-r-2 border-[#be2929]">Disetujui: 0</p>
-                <p class="pl-2">Ditolak: 1</p>
+            <div class="mt-4 flex flex-col text-md items-center gap-2">
+                <div class="flex">
+                    <p class="pr-2">Pending: <span id="blood_request_pending" class="font-bold"></span></p>
+                    <p class="pl-2 pr-2">Disetujui: <span id="blood_request_accepted" class="font-bold"></span></p>
+                    <p class="pl-2 pr-2">Ditolak: <span id="blood_request_rejected" class="font-bold"></span></p>
+                </div>
+                <div class="flex">
+                    <p class="pr-2">Dalam Proses: <span id="blood_request_in_process" class="font-bold"></span></p>
+                    <p class="pr-2">Selesai: <span id="blood_request_finish" class="font-bold"></span></p>
+                </div>
             </div>
         </div>
 
@@ -56,15 +64,15 @@
                     colors="primary:#ffffff" style="width:130px;height:80px">
                 </lord-icon>
                 <div class="ml-3 mt-2">
-                    <p class="font-bold text-2xl">Poin Anda</p>
+                    <p class= "text-2xl font-bold">Poin Anda</p>
                     <p class="text-[10px]">Kumpulkan Poin Lebih Banyak dengan Mengunggah Bukti Donor lalu Klaim
                         Hadiahnya!</p>
                 </div>
             </div>
 
-            <div class="flex ml-3 drop-shadow-lg mt-3 font-bold text-2xl">
-                <p class="mr-2">90 Poin</p>
-                <p class="pl-2 border-l-2">10 Reward Poin</p>
+            <div class="flex ml-3 drop-shadow-lg mt-3 font-bold">
+                <p class="mr-2 font-sm pr-6"><span id="donor_points" class="text-3xl"></span> <br/>Poin Donor</p>
+                <p class="pl-6 border-l-2 font-sm"><span id="reward_points" class="text-3xl"></span> <br/>Poin Reward</p>
             </div>
 
         </div>
@@ -73,12 +81,40 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    $(document).ready(function() {
-        var token = localStorage.getItem('token');
-        if (!token) {
-            window.location.href = '/login';
-            return;
+$(document).ready(function() {
+    var token = localStorage.getItem('token');
+    var baseUrl = 'https://skripsi-kita.my.id/apis/';
+    if (!token) {
+        window.location.href = '/login';
+        return;
+    }
+
+    // load dashboard data
+    $.ajax({
+        url: baseUrl + 'profile/user/dashboard',
+        method: 'GET',
+        headers: {
+            'Authorization': 'Bearer ' + token,
+            'Content-Type': 'application/json'
+        },
+        success: function(response) {
+            $('#blood_stocks').text(response.data.blood_stocks || 0);
+            $('#donor_schedules').text(response.data.donor_schedules || 0);
+            $('#blood_request_accepted').text(response.data.blood_request_accepted || 0);
+            $('#blood_request_pending').text(response.data.blood_request_pending || 0);
+            $('#blood_request_rejected').text(response.data.blood_request_rejected || 0);
+            $('#blood_request_in_process').text(response.data.blood_request_in_process || 0);
+            $('#blood_request_finish').text(response.data.blood_request_finish || 0);
+            $('#reward_points').text(response.data.user_profile.reward_points || 0);
+            $('#donor_points').text(response.data.user_profile.donor_points || 0);
+            $('.regency_name').text(response.data.regency_name || 0);
+            console.log(response.data);
+        },
+        error: function(xhr, status, error) {
+            console.error('Error:', error);
+            alert('An error occurred while loading data');
         }
     });
+});
 </script>
 @endsection

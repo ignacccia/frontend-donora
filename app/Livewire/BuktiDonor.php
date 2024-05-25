@@ -4,10 +4,10 @@ namespace App\Livewire;
 
 use Livewire\Component;
 
-class RiwayatDonor extends Component
+class BuktiDonor extends Component
 {
     public function render()
     {
-        return view('livewire.riwayat-donor');
+        return view('livewire.bukti-donor');
     }
 }

@@ -87,12 +87,12 @@ $(document).ready(function() {
                     .token); //simpan data baerer token
                     window.location.href = '/dashboard';
                 } else {
-                    alert('Login failed');
+                    toastr.error('Terjadi kesalahan saat masuk');
                 }
             },
             error: function(xhr, status, error) {
                 console.error('Error:', error);
-                alert('Login failed');
+                atoastr.error('Terjadi kesalahan saat masuk');
             }
         });
     });

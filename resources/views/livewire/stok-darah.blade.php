@@ -4,7 +4,7 @@
 <div class="bg-white rounded-2xl p-6 mt-4 flex flex-col shadow-lg z-10">
 
     <div class="flex flex-col">
-        <p class="font-semibold text-3xl text-[#172B4D] drop-shadow">Stok Darah Terkini Di Surabaya Per Mei/2024</p>
+        <p class="font-semibold text-3xl text-[#172B4D] drop-shadow">Stok Darah Terkini Di <span id="selectedUtdPMI">Seluruh Indonesia</span> Per Mei/2024</p>
     </div>
 
     <div class="flex mt-6 mb-2">
@@ -23,7 +23,7 @@
         <p class="font-semibold text-2xl text-[#172B4D]">Detail Stok Darah</p>
         <div>
             <div class="mt-6 text-[11px] text-center">
-                <table id="myTable" class="table-auto min-w-full">
+                {{-- <table id="myTable" class="table-auto min-w-full">
                     <thead>
                         <tr>
                             <th>Produk Darah</th>
@@ -53,7 +53,28 @@
                         </tr>
                         <!-- Tambahkan baris berikut sesuai kebutuhan -->
                     </tbody>
+                </table> --}}
+                <table id="example" class="display" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th class="text-left">Nama</th>
+                            <th>A+</th>
+                            <th>A-</th>
+                            <th>B+</th>
+                            <th>B-</th>
+                            <th>AB+</th>
+                            <th>AB-</th>
+                            <th>O+</th>
+                            <th>O-</th>
+                            <th>Total Stock</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Data akan dimuat oleh JavaScript -->
+                    </tbody>
                 </table>
+
             </div>
         </div>
     </div>
@@ -61,21 +82,26 @@
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
 <script>
-    $(document).ready(function() {
-        
+    $(document).ready(function() {        
         var selectedUtdId = 0;
         var baseUrl = 'https://skripsi-kita.my.id/apis/';
+        var token = localStorage.getItem('token');
         var chart;
-        loadChartWithUtdProfileId(selectedUtdId);
 
+        loadChartWithUtdProfileId(selectedUtdId);
+        loadDatatables();
         // Function to handle dropdown change event
         $('#utd-select').change(function() {
             selectedUtdId = $(this).val(); // Remove var declaration to update global variable
+            selectedUtdName = $(this).find('option:selected').text(); // Mengambil teks dari opsi yang dipilih
+            $("#selectedUtdPMI").text(selectedUtdName);
             console.log("selectedUtdId", selectedUtdId);
             if (selectedUtdId) {
                 loadChartWithUtdProfileId(selectedUtdId);
             }
+            loadDatatables();
         });
 
         // Function to create chart
@@ -159,9 +185,88 @@
                 }
             });
         }
-
         // Call loadDropdownData function to load dropdown data initially
         loadDropdownData();
+
+        function loadDatatables() {
+            if ($.fn.DataTable.isDataTable('#example')) {
+                // Hapus DataTable sebelumnya jika sudah diinisialisasi sebelumnya
+                $('#example').DataTable().destroy();
+            }
+            if (selectedUtdId == 0) {
+                $.ajax({
+                    url: baseUrl + 'blood/stock/get-all-by-mapping-all-stock',
+                    method: 'GET',
+                    headers: {
+                        'Authorization': 'Bearer ' + token
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            // Buat tabel dari data
+                            $('#example').DataTable({
+                                data: response.data,
+                                columns: [
+                                    { data: 'id' },
+                                    { data: 'name', className: 'text-left' },
+                                    { data: 'stock_a_positive' },
+                                    { data: 'stock_a_negative' },
+                                    { data: 'stock_b_positive' },
+                                    { data: 'stock_b_negative' },
+                                    { data: 'stock_ab_positive' },
+                                    { data: 'stock_ab_negative' },
+                                    { data: 'stock_o_positive' },
+                                    { data: 'stock_o_negative' },
+                                    { data: 'total_stock' }
+                                ]
+                            });
+                        } else {
+                            console.error('Failed to load data:', response.message);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error:', error);
+                    }
+                });
+            } else {
+                $.ajax({
+                    url: baseUrl + 'blood/stock/get-all-by-mapping-all-stock/detail',
+                    method: 'GET',
+                    headers: {
+                        'Authorization': 'Bearer ' + token
+                    },
+                    data: {
+                        "utd_profile_id":selectedUtdId
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            // Buat tabel dari data
+                            $('#example').DataTable({
+                                data: response.data,
+                                columns: [
+                                    { data: 'blood_product_id' },
+                                    { data: 'blood_product_name', className: 'text-left'},
+                                    { data: 'stock_a_positive' },
+                                    { data: 'stock_a_negative' },
+                                    { data: 'stock_b_positive' },
+                                    { data: 'stock_b_negative' },
+                                    { data: 'stock_ab_positive' },
+                                    { data: 'stock_ab_negative' },
+                                    { data: 'stock_o_positive' },
+                                    { data: 'stock_o_negative' },
+                                    { data: 'total_stock' }
+                                ]
+                            });
+                        } else {
+                            console.error('Failed to load data:', response.message);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error:', error);
+                    }
+                });
+            }
+        }
+
 
     });
 </script>

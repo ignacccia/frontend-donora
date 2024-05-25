@@ -18,6 +18,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     @vite('resources/css/app.css')
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet-control-search/dist/leaflet.control.search.min.css" />
     <script src="https://code.highcharts.com/highcharts.js"></script>
     <script src="https://code.highcharts.com/modules/drilldown.js"></script>
@@ -31,7 +32,42 @@
     <!-- Memuat DataTables CSS dari CDN -->
     <link href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css" rel="stylesheet">
     <script src="https://cdn.lordicon.com/lordicon.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <style>
+    #loader {
+        position: fixed;
+        z-index: 9999;
+        background-color: #D80032;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: opacity 1s;
+    }
+
+    /* Animasi untuk putaran */
+    @keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        0% {
+            transform: rotate(360deg);
+        }
+    }
+
+    /* Tambahkan gaya untuk gambar loader */
+    #loader img {
+        width: 70px;
+        /* Sesuaikan lebar gambar */
+        height: auto;
+        /* Sesuaikan tinggi gambar */
+        animation: spin 1s linear infinite;
+        /* Animasi putaran */
+    }
+
     #map {
         height: 300px;
         margin-bottom: 10px;
@@ -42,26 +78,14 @@
         font-size: 10px;
         color: #666;
     }
-
-    /* CSS untuk loader */
-    .loader-container {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(255, 255, 255, 0.5);
-        /* Transparan agar bisa melihat halaman di belakang */
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 9999;
-        /* Pastikan lebih tinggi dari z-index konten lain */
-    }
     </style>
 </head>
 
 <body class="flex mb-6">
+
+    <div id="loader">
+        <img src="{{ asset('images/donora.svg') }}" alt="Loading...">
+    </div>
 
     <div class="fixed top-0 left-0 w-full h-full bg-gradient-to-b from-red-700 via-red-50 to-transparent"></div>
 
@@ -76,7 +100,7 @@
             <div class="w-4/5 border border-gray-100 mt-5 "></div>
         </div>
 
-        <div class="flex flex-col ml-4 mt-5 mb-5 mr-4 gap-1.5 cursor-pointer">
+        <div class="flex flex-col ml-4 mt-3 mb-4 mr-4 gap-2 cursor-pointer">
             <div
                 class="hover:bg-slate-100 pt-2 pb-2 pl-1 pr-1 rounded-[8px] transition-all sidebar-item {{ $currentPage == 'dashboard' ? 'font-bold bg-slate-100' : '' }}">
                 <a href="/dashboard">
@@ -122,10 +146,11 @@
                 class="hover:bg-slate-100 pt-2 pb-2 pl-1 pr-1 rounded-[8px] transition-all sidebar-item {{ $currentPage == 'riwayat-ajuan' ? 'font-bold bg-slate-100' : '' }}">
                 <a href="/riwayat-ajuan">
                     <div class="flex gap-5 ml-2 mr-2">
-                        <i class="fa-solid fa-notes-medical text-[#D80032] mt-1"></i>
+                        <i class="fa-solid fa-clock-rotate-left text-[#D80032] mt-1"></i>
                         <p>Riwayat Ajuan</p>
                     </div>
                 </a>
+
             </div>
 
             <div
@@ -139,11 +164,11 @@
             </div>
 
             <div
-                class="hover:bg-slate-100 pt-2 pb-2 pl-1 pr-1 rounded-[8px] transition-all sidebar-item {{ $currentPage == 'riwayat-donor' ? 'font-bold bg-slate-100' : '' }}">
-                <a href="/riwayat-donor">
+                class="hover:bg-slate-100 pt-2 pb-2 pl-1 pr-1 rounded-[8px] transition-all sidebar-item {{ $currentPage == 'bukti-donor' ? 'font-bold bg-slate-100' : '' }}">
+                <a href="/bukti-donor">
                     <div class="flex gap-5 ml-2 mr-2">
-                        <i class="fa-solid fa-clock-rotate-left text-[#D80032] mt-1"></i>
-                        <p>Riwayat Donor</p>
+                        <i class="fa-solid fa-receipt text-[#D80032] mt-1"></i>
+                        <p class="pl-1">Bukti Donor</p>
                     </div>
                 </a>
             </div>
@@ -193,7 +218,7 @@
             <a href="/akun">
                 <div class="flex gap-2 text-sm cursor-pointer">
                     <img src="{{ asset('images/avatar_example.svg') }}" alt="Foto Profil" class="w-6 h-6 rounded-full"
-                        id="profile_picture">
+                        id="profile-picture">
                     <p class="mt-0.5" id="username"></p>
                 </div>
             </a>
@@ -214,6 +239,8 @@
 
     <script>
     $(document).ready(function() {
+        $('#loader').show();
+
         // cek apakah token available (jika tidak redirect ke login)
         var token = localStorage.getItem('token');
         var baseUrl = 'https://skripsi-kita.my.id/apis/'
@@ -221,6 +248,7 @@
             // Tampilkan loader saat proses redirect
             window.location.href = '/masuk';
         }
+
         // ambil data username untuk navbar
         $.ajax({
             url: baseUrl + 'profile/user',
@@ -231,11 +259,22 @@
             },
             success: function(response) {
                 $('#username').text(response.data.user.username);
+
+                // Tambahkan foto profil jika tersedia
+                if (response.data.profile_picture) {
+                    $('#profile-picture').attr('src', response.data.profile_picture);
+                } else {
+                    // Jika tidak ada foto profil, tampilkan gambar default atau pesan pengguna tidak memiliki foto profil
+                    $('#profile-picture').attr('src', 'avatar_example.svg');
+                    // Atau tampilkan pesan bahwa pengguna tidak memiliki foto profil
+                    // $('#profile-picture').attr('alt', 'Foto Profil Tidak Tersedia');
+                }
             },
             error: function(xhr, status, error) {
                 console.error('Error:', error);
-                alert('Failed to fetch username');
-            }
+                alert('Gagal mengambil data');
+            },
+
         });
 
 
@@ -259,13 +298,18 @@
                         window.location.href = '/masuk';
                     },
                     error: function(xhr, status, error) {
-                        console.error('Logout error:', error);
-                        alert('Logout failed');
+                        console.error('Terjadi Kesalahan:', error);
+                        alert('Terjadi Kesalahan');
                     }
                 });
             } else {
                 window.location.href = '/login';
             }
+        });
+
+        // Sembunyikan loader setelah halaman sepenuhnya dimuat
+        $(window).on('load', function() {
+            $('#loader').fadeOut('slow');
         });
     });
     </script>

@@ -51,10 +51,6 @@ Route::get('/jadwal-donor', function () {
     $currentPage = 'jadwal-donor';
     return view('livewire.jadwal-donor', compact('currentPage'));
 });
-Route::get('/riwayat-ajuan', function () {
-    $currentPage = 'riwayat-ajuan';
-    return view('livewire.riwayat-ajuan', compact('currentPage'));
-});
 Route::get('/akun', function () {
     $currentPage = 'akun';
     return view('livewire.akun', compact('currentPage'));
@@ -65,9 +61,12 @@ Route::get('/konfirm-pass', function () {
 Route::get('/poin', function () {
     $currentPage = 'poin';
     return view('livewire.poin', compact('currentPage'));
-    return view('livewire.poin');
 });
-Route::get('/riwayat-donor', function () {
-    $currentPage = 'riwayat-donor';
-    return view('livewire.riwayat-donor', compact('currentPage'));
+Route::get('/bukti-donor', function () {
+    $currentPage = 'bukti-donor';
+    return view('livewire.bukti-donor', compact('currentPage'));
+});
+Route::get('/riwayat-ajuan', function () {
+    $currentPage = 'riwayat-ajuan';
+    return view('livewire.riwayat-ajuan', compact('currentPage'));
 });

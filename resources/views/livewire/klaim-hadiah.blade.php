@@ -5,9 +5,11 @@
     <div class="flex flex-col sm:flex-row md:flex-row lg:flex-row justify-between">
         <div class="sm:mb-2">
             <p class="font-semibold text-3xl text-[#172B4D] drop-shadow">Klaim Hadiah</p>
-            <p class="text-[12px] mt-2">Kumpulkan poin sebanyak mungkin dengan melakukan donor lalu <span
-                    class="text-[#3793D5] cursor-pointer hover:underline" href="">unggah bukti</span> dan tukarkan
+            <p class="text-[12px] mt-2">Kumpulkan poin sebanyak mungkin dengan melakukan donor lalu <a
+                    class="text-[#3793D5] cursor-pointer hover:underline" href="/bukti-donor">unggah bukti</a> dan
+                tukarkan
                 dengan hadiah menarik!</p>
+            <p class="text-md font-bold mt-1 text-[#172B4D]" id="poinReward">70 poin reward</p>
         </div>
         <div class="mt-2 sm:mt-0 sm:flex sm:items-center">
             <button id="btnOpenModal"
@@ -35,31 +37,6 @@
             </button>
         </div>
         <div class="overflow-y-auto max-h-80">
-            <div class="flex flex-col md:flex-row lg:flex-row bg-[#fbfbfb] w-full shadow shadow-gray-400 p-4 rounded-lg mb-4"
-                id="reward">
-                <div class="flex flex-col md:flex-row lg:flex-row">
-                    <img src="{{ asset('images/rewardBanner.jpg') }}" alt="Reward"
-                        class="w-full md:w-[280px] h-[120px] md:h-auto lg:h-auto rounded shadow shadow-gray-300 mb-4 md:mb-0"
-                        id="bannerReward">
-                    <div class="flex flex-col w-full md:w-auto lg:w-auto justify-between">
-                        <p class="text-gray-500 text-lg font-semibold mt-2" id="namaReward">Promo Voucher Makan dan
-                            Transport By
-                            Grab</p>
-                        <p class="text-[12px] text-gray-500" id="deskripsiReward">Commodi magnam ab sunt ipsam. Qui
-                            possimus quibusdam autem officiis molestias ullam modi. Dolorum voluptate iure repellat
-                            labore
-                            eligendi.</p>
-                        <div class="flex flex-row md:flex-row lg:flex-row justify-between mt-2">
-                            <p class="text-md font-bold mt-1 text-gray-500" id="poinReward">70 poin</p>
-                            <button
-                                class="bg-[#818181] self-end ml-12 mb-1 text-white px-6 py-2 text-sm font-bold rounded-xl"
-                                disabled>
-                                Telah Diklaim
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
             <div class="flex flex-col md:flex-row lg:flex-row bg-[#fbfbfb] w-full shadow shadow-gray-400 p-4 rounded-lg mb-4"
                 id="reward">
@@ -86,6 +63,7 @@
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
 
@@ -113,27 +91,6 @@
             </div>
         </div>
 
-        <div class="flex flex-col md:flex-row lg:flex-row bg-[#fbfbfb] w-full shadow shadow-gray-400 p-4 rounded-lg"
-            id="reward">
-            <div class="flex flex-col md:flex-row lg:flex-row">
-                <img src="{{ asset('images/rewardBanner.jpg') }}" alt="Reward"
-                    class="w-full md:w-[280px] h-[120px] md:h-auto lg:h-auto rounded shadow shadow-gray-300 mb-4 md:mb-0"
-                    id="bannerReward">
-                <div class="flex flex-col w-full md:w-auto lg:w-auto justify-between">
-                    <p class="text-gray-500 text-lg font-semibold mt-2" id="namaReward">Promo Voucher Makan dan
-                        Transport By
-                        Grab</p>
-                    <p class="text-[12px] text-gray-500" id="deskripsiReward">Commodi magnam ab sunt ipsam. Qui
-                        possimus quibusdam autem officiis molestias ullam modi. Dolorum voluptate iure repellat labore
-                        eligendi.</p>
-                    <div class="flex flex-row md:flex-row lg:flex-row justify-between mt-2">
-                        <p class="text-md font-bold mt-1 text-gray-500" id="poinReward">70 poin</p>
-                        <button
-                            class="bg-[#14C465] self-end md:mt-0 lg:mt-0 text-white px-6 py-2 text-sm font-bold rounded-xl hover:bg-[#10a254]">Klaim</button>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
 
 
