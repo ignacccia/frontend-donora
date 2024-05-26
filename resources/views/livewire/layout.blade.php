@@ -38,7 +38,7 @@
     #loader {
         position: fixed;
         z-index: 9999;
-        background-color: #D80032;
+        background-color: #be2929;
         width: 100%;
         height: 100%;
         display: flex;
@@ -172,15 +172,15 @@
                     </div>
                 </a>
             </div>
-
             <div
-                class="hover:bg-slate-100 pt-2 pb-2 pl-1 pr-1 rounded-[8px] transition-all sidebar-item {{ $currentPage == 'poin' ? 'font-bold bg-slate-100' : '' }}">
-                <a href="/poin">
-                    <div class="flex gap-5 ml-2 mr-2">
-                        <i class="fa-solid fa-trophy text-[#D80032] mt-1"></i>
-                        <p>Leaderboard Poin</p>
+                class="hover:bg-slate-100 pt-2 pb-2 pl-1 pr-1 rounded-[8px] transition-all sidebar-item {{ $currentPage == 'notifikasi' ? 'font-bold bg-slate-100' : '' }}">
+                <a href="/notifikasi">
+                    <div class="flex gap-6 ml-2 mr-2">
+                        <i class="fa-solid fa-bell text-[#D80032] mt-1"></i>
+                        <p>Notifikasi</p>
                     </div>
                 </a>
+
             </div>
 
             <div
@@ -192,17 +192,16 @@
                     </div>
                 </a>
             </div>
-
             <div
-                class="hover:bg-slate-100 pt-2 pb-2 pl-1 pr-1 rounded-[8px] transition-all sidebar-item {{ $currentPage == 'notifikasi' ? 'font-bold bg-slate-100' : '' }}">
-                <a href="/notifikasi">
-                    <div class="flex gap-6 ml-2 mr-2">
-                        <i class="fa-solid fa-bell text-[#D80032] mt-1"></i>
-                        <p>Notifikasi</p>
+                class="hover:bg-slate-100 pt-2 pb-2 pl-1 pr-1 rounded-[8px] transition-all sidebar-item {{ $currentPage == 'poin' ? 'font-bold bg-slate-100' : '' }}">
+                <a href="/poin">
+                    <div class="flex gap-5 ml-2 mr-2">
+                        <i class="fa-solid fa-trophy text-[#D80032] mt-1"></i>
+                        <p>Leaderboard Poin</p>
                     </div>
                 </a>
-
             </div>
+
         </div>
 
         <button id="logout-button"

@@ -9,15 +9,15 @@
                     class="text-[#3793D5] cursor-pointer hover:underline" href="/bukti-donor">unggah bukti</a> dan
                 tukarkan
                 dengan hadiah menarik!</p>
-            <p class="text-md font-bold mt-1 text-[#172B4D]" id="poinReward">70 poin reward</p>
         </div>
         <div class="mt-2 sm:mt-0 sm:flex sm:items-center">
             <button id="btnOpenModal"
                 class="justify-center self-end px-6 font-bold py-1 text-sm tracking-tight leading-8 text-center text-white mb-5 whitespace-nowrap bg-[#BA1D1D] rounded-xl shadow-gray-500 sm:ml-2.5 sm:mr-0 hover:bg-[#a11f1f]">
-                <i class="fa-solid fa-gift mt-1 mr-1"></i> Hadiah Saya
+                <i class="fa-solid fa-gift mr-1"></i> Hadiah Saya
             </button>
         </div>
     </div>
+    <p class="text-md font-bold text-[#172B4D]"><span id="reward_points"></span> poin reward</p>
 
     <!-- Overlay Background Modal -->
     <div class="fixed top-0 left-0 w-full h-full bg-gray-800 opacity-50 z-50 hidden" id="overlay"></div>
@@ -95,6 +95,32 @@
 
 
     <script>
+    $(document).ready(function() {
+        var token = localStorage.getItem('token');
+        var baseUrl = 'https://skripsi-kita.my.id/apis/';
+        if (!token) {
+            window.location.href = '/login';
+            return;
+        }
+
+        // load dashboard data
+        $.ajax({
+            url: baseUrl + 'profile/user/dashboard',
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + token,
+                'Content-Type': 'application/json'
+            },
+            success: function(response) {
+                $('#reward_points').text(response.data.user_profile.reward_points || 0);
+                console.log(response.data);
+            },
+            error: function(xhr, status, error) {
+                console.error('Error:', error);
+                alert('An error occurred while loading data');
+            }
+        });
+    });
     const btnOpenModal = document.getElementById('btnOpenModal');
     const modal = document.getElementById('myReward');
     const overlay = document.getElementById('overlay');

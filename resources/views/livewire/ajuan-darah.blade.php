@@ -4,7 +4,7 @@
 <div class="bg-white rounded-2xl p-6 mt-4 flex flex-col shadow-lg z-10">
     <div class="flex justify-between">
         <div class="flex flex-col">
-            <p class="font-semibold text-3xl text-[#172B4D] drop-shadow">Form Ajuan Permintaan Darah</p>
+            <p class="font-semibold text-3xl text-[#172B4D] drop-shadow">Formulir Ajuan Permintaan Darah</p>
             <p class="text-xs text-[#172B4D] mt-2">Pastikan terlebih dahulu darah memang tidak ada di
                 <a class="text-[#3793D5]" style="text-decoration: underline;" href="/stok-darah">stok</a>
                 dan isi form dengan lengkap
@@ -297,7 +297,7 @@ $(document).ready(function() {
                 // Cek apakah ada respons error dari server
                 if (xhr.responseJSON && xhr.responseJSON.message) {
                     // Tampilkan pesan error dari server menggunakan Toastr.js
-                    toastr.error(xhr.responseJSON.message);
+                    toastr.error('Isi formulir dengan lengkap');
                 } else {
                     // Tampilkan pesan error default
                     toastr.error('Terjadi kesalahan saat mengirim permintaan');

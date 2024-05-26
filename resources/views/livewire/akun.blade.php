@@ -598,7 +598,7 @@ $(document).ready(function() {
                 // Cek apakah ada respons error dari server
                 if (xhr.responseJSON && xhr.responseJSON.message) {
                     // Tampilkan pesan error dari server menggunakan Toastr.js
-                    toastr.error(xhr.responseJSON.message);
+                    toastr.error('Isi profil dengan lengkap!');
                 } else {
                     // Tampilkan pesan error default
                     toastr.error('Terjadi kesalahan saat mengirim permintaan');

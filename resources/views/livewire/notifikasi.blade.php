@@ -6,39 +6,8 @@
     <p class="font-semibold text-3xl text-[#172B4D] drop-shadow">Notifikasi</p>
     <p class="text-sm mt-2">Tekan notifikasi untuk melihat detail informasi dan menjadi pendonor darurat</p>
 
-    <div class="mt-10 p-1 flex flex-col gap-4">
-        <div id="openGeneralModal"
-            class="bg-[#fbfbfb] shadow-sm shadow-gray-400 pt-4 pb-4 pl-6 pr-6 rounded-2xl cursor-pointer w-full hover:bg-[#f1f1f1]">
-            <div class="flex justify-between">
-                <div class="flex flex-col gap-2">
-                    <div class="text-gray-700 text-lg font-semibold">Ajuan Bukti Donor telah diterima!</div>
-                    <div class="flex gap-2">
-                        <div class="text-sm text-gray-500 mt-1">2024-24-16</div>
-                        <div class="bg-[#14C465] w-20 text-center text-white text-sm p-1 shadow rounded-3xl font-bold">
-                            Umum</div>
-                    </div>
-                </div>
-                <div class="my-auto text-gray-700 "><i class="fa-solid fa-chevron-right"></i></div>
-            </div>
-        </div>
-
-        <div id="openImportantModal"
-            class="bg-[#fbfbfb] shadow-sm shadow-gray-400 pt-4 pb-4 pl-6 pr-6 rounded-2xl cursor-pointer w-full hover:bg-[#f1f1f1]">
-            <div class="flex justify-between">
-                <div class="flex flex-col gap-2">
-                    <div class="text-gray-700 text-lg font-semibold">Ajuanmu telah diterima!</div>
-                    <div class="flex gap-2">
-                        <div class="text-sm text-gray-500 mt-1">2024-24-16</div>
-                        <div class="bg-[#e9d525] w-20 text-center text-white text-sm p-1 shadow rounded-3xl font-bold">
-                            Penting</div>
-                    </div>
-                </div>
-                <div class="my-auto text-gray-700 "><i class="fa-solid fa-chevron-right"></i></div>
-            </div>
-        </div>
-
-        <div id="openUrgentModal"
-            class="bg-[#fbfbfb] shadow-sm shadow-gray-400 pt-4 pb-4 pl-6 pr-6 rounded-2xl cursor-pointer w-full hover:bg-[#f1f1f1]">
+    <div id="cards-container" class="mt-10 p-1 flex flex-col gap-4">
+        {{-- <div class="card-notifikasi bg-[#fbfbfb] shadow-sm shadow-gray-400 pt-4 pb-4 pl-6 pr-6 rounded-2xl cursor-pointer w-full hover:bg-[#f1f1f1]">
             <div class="flex justify-between">
                 <div class="flex flex-col gap-2">
                     <div class="text-gray-700 text-lg font-semibold">Dibutuhkan Segera + B Platelet Concentrate di
@@ -51,77 +20,27 @@
                 </div>
                 <div class="my-auto text-gray-700 "><i class="fa-solid fa-chevron-right"></i></div>
             </div>
-        </div>
+        </div> --}}
     </div>
 
-    <div id="GeneralModalBackdrop"
-        class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 overflow-y-auto hidden">
-        <div class="absolute top-0 w-2/3 flex justify-center">
-            <div id="GeneralModalContent"
-                class="relative bg-white rounded-lg p-8 mt-8 transform -translate-y-full  transition-transform duration-500">
-                <button id="closeGeneralModal"
-                    class="absolute top-4 right-4 mt-3 text-gray-600 hover:text-gray-800 text-2xl">&times;</button>
-                <div>
-                    <h2 class="text-xl font-bold mb-1 mr-6">Ajuan Bukti Donor Anda telah diterima</h2>
-                    <div class="flex gap-2">
-                        <div class="text-sm text-gray-500 mt-1">2024-24-16</div>
-                        <div class="bg-[#14C465] w-20 text-center text-white text-sm p-1 shadow rounded-3xl font-bold">
-                            Umum</div>
-                    </div>
-                    <div class="text-sm text-gray-500 mt-4">
-                        Mohon maaf, kami tidak dapat melanjutkan proses untuk ajuan pbukti donor yang kamu kirimkan.
-                        Hal ini dikarenakan testtttttttt. Silahkan ajukan kembali dengan memperhatikan data-data yang
-                        kamu kirimkan. Salam Tim Donora</div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal untuk Notifikasi Penting -->
-    <div id="ImportantModalBackdrop"
-        class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 overflow-y-auto hidden">
-        <div class="absolute top-0 w-2/3 flex justify-center">
-            <div id="ImportantModalContent"
-                class="relative bg-white rounded-lg p-8 mt-8 transform -translate-y-full transition-transform duration-500">
-                <button id="closeImportantModal"
-                    class="absolute top-4 right-4 mt-3 text-gray-600 hover:text-gray-800 text-2xl">&times;</button>
-                <div>
-                    <h2 class="text-xl font-bold mb-1 mr-6">Ajuan Bukti Donor Anda telah diterima</h2>
-                    <div class="flex gap-2">
-                        <div class="text-sm text-gray-500 mt-1">2024-24-16</div>
-                        <div class="bg-[#e9d525] w-20 text-center text-white text-sm p-1 shadow rounded-3xl font-bold">
-                            Penting</div>
-                    </div>
-                    <div class="text-sm text-gray-500 mt-4">
-                        Mohon maaf, kami tidak dapat melanjutkan proses untuk ajuan pbukti donor yang kamu kirimkan.
-                        Hal ini dikarenakan testtttttttt. Silahkan ajukan kembali dengan memperhatikan data-data yang
-                        kamu kirimkan. Salam Tim Donora</div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal untuk Notifikasi Urgent -->
-    <div id="UrgentModalBackdrop"
-        class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 overflow-y-auto hidden">
+    <!-- Modal untuk Detail Notifikasi -->
+    <div id="detailModalBackdrop" class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 overflow-y-auto hidden">
         <div class="absolute top-0 flex w-2/3 justify-center">
-            <div id="UrgentModalContent"
-                class="relative bg-white rounded-lg p-8 mt-8 transform -translate-y-full transition-transform duration-500">
-                <button id="closeUrgentModal"
-                    class="absolute top-4 right-4 mt-3 text-gray-600 hover:text-gray-800 text-2xl">&times;</button>
+            <div id="modalContent" class="relative bg-white rounded-lg p-8 mt-8 transform -translate-y-full transition-transform duration-500">
+                <button id="closeModal" class="absolute top-4 right-4 mt-3 text-gray-600 hover:text-gray-800 text-2xl">&times;</button>
                 <div>
-                    <h2 class="text-xl font-bold mb-1 mr-6">Dibutuhkan Segera + A Anti Hemophilic Factor di Surabaya</h2>
+                    <h2 id="notificationTitle" class="text-xl font-bold mb-1 mr-6">Dibutuhkan Segera + A Anti Hemophilic Factor di Surabaya</h2>
                     <div class="flex gap-2">
-                        <div class="text-sm text-gray-500 mt-1">2024-24-16</div>
-                        <div class="bg-[#BA1D1D] w-20 text-center text-white font-bold text-sm p-1 shadow rounded-3xl">
-                            Darurat</div>
+                        <div id="notificationDate" class="text-sm text-gray-500 mt-1">2024-24-16</div>
+                        <div id="notificationLevel" class="bg-[#BA1D1D] w-20 text-center text-white font-bold text-sm p-1 shadow rounded-3xl">Darurat</div>
                     </div>
-                    <div class="text-sm text-gray-500 mt-4">
-                        Mohon maaf, kami tidak dapat melanjutkan proses untuk ajuan pbukti donor yang kamu kirimkan.
-                        Hal ini dikarenakan testtttttttt. Silahkan ajukan kembali dengan memperhatikan data-data yang
-                        kamu kirimkan. Salam Tim Donora</div>
-                    <button id="" type="submit"
-                        class="bg-[#d42c2c] mt-2 text-sm text-white px-4 py-2 rounded-xl mt-4 hover:bg-[#a11f1f] focus:outline-none">
+                    <div id="notificationDescription" class="text-sm text-gray-500 mt-4"></div>
+                    <div class="utd-info">
+                        <div class="caption-utd text-sm text-gray-500 mt-4">Jika bersedia membatu, kamu dapat mendonor di :</div>
+                        <div id="utd-name" class="text-sm text-gray-700 mt-1 font-bold">UTD PMI Surabaya</div>
+                        <div class=" text-sm text-gray-500"><i class="fa-solid fa-map-pin"></i><span id="utd-address"> Jl. jl jalannnnnnn</span></div>
+                    </div>
+                    <button id="registerDonorButton" class="bg-[#d42c2c] mt-2 text-sm text-white px-4 py-2 rounded-xl mt-4 hover:bg-[#a11f1f] focus:outline-none">
                         Daftar Sebagai Pendonor
                     </button>
                 </div>
@@ -129,88 +48,210 @@
         </div>
     </div>
 
+
 </div>
 
 <script>
-document.addEventListener("DOMContentLoaded", function() {
-    const openGeneralModalButton = document.getElementById("openGeneralModal");
-    const openImportantModalButton = document.getElementById("openImportantModal");
-    const openUrgentModalButton = document.getElementById("openUrgentModal");
-    const closeImportantModalButton = document.getElementById("closeImportantModal");
-    const closeGeneralModalButton = document.getElementById("closeGeneralModal");
-    const closeUrgentModalButton = document.getElementById("closeUrgentModal");
-    const GeneralModalBackdrop = document.getElementById("GeneralModalBackdrop");
-    const ImportantModalBackdrop = document.getElementById("ImportantModalBackdrop");
-    const UrgentModalBackdrop = document.getElementById("UrgentModalBackdrop");
-    const GeneralModalContent = document.getElementById("GeneralModalContent");
-    const ImportantModalContent = document.getElementById("ImportantModalContent");
-    const UrgentModalContent = document.getElementById("UrgentModalContent");
+    const baseUrl = 'https://skripsi-kita.my.id/apis/';
+    var token = localStorage.getItem('token');
+    $(document).ready(function() {
+        // load data notifikasi
+        $.ajax({
+            url: baseUrl + 'user-notification',
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + token
+            },
+            success: function(response) {
+                if (response.success) {
+                    $('#cards-container').empty();
+                    response.data.forEach(function(item) {
+                        var notification = item.notification;
+                        var createdAt = new Date(item.created_at).toLocaleDateString('id-ID', {
+                            day: 'numeric',
+                            month: 'long',
+                            year: 'numeric'
+                        });
 
-    // Function to open the general modal with slide from top animation
-    function openGeneralModal() {
-        GeneralModalBackdrop.classList.remove("hidden");
-        setTimeout(() => {
-            GeneralModalContent.style.transform = "translateY(0)";
-        }, 10);
-    }
+                        var levelClass = '';
+                        var levelText = '';
+                        switch(notification.level) {
+                            case 'urgent':
+                                levelClass = 'bg-[#BA1D1D] text-white';
+                                levelText = 'Darurat';
+                                break;
+                            case 'important':
+                                levelClass = 'bg-[#e9d525] text-white';
+                                levelText = 'Penting';
+                                break;
+                            case 'general':
+                            default:
+                                levelClass = 'bg-[#797979] text-white';
+                                levelText = 'Umum';
+                                break;
+                        }
 
-    // Function to close the general modal with slide up animation
-    function closeGeneralModal() {
-        GeneralModalContent.style.transform = "translateY(-100%)";
-        setTimeout(() => {
-            GeneralModalBackdrop.classList.add("hidden");
-        }, 500); // Match this duration with the transition duration
-    }
+                        var cardHtml = `
+                            <div class="card-notifikasi bg-[#fbfbfb] shadow-sm shadow-gray-400 pt-4 pb-4 pl-6 pr-6 rounded-2xl cursor-pointer w-full hover:bg-[#f1f1f1]" data-slug="${item.slug}">
+                                <div class="flex justify-between">
+                                    <div class="flex flex-col gap-2">
+                                        <div class="text-gray-700 text-lg font-semibold">${notification.title}</div>
+                                        <div class="flex gap-2">
+                                            <div class="text-sm text-gray-500 mt-1">${createdAt}</div>
+                                            <div class="${levelClass} w-20 text-center font-bold text-sm p-1 shadow rounded-3xl">
+                                                ${levelText}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="my-auto text-gray-700"><i class="fa-solid fa-chevron-right"></i></div>
+                                </div>
+                            </div>
+                        `;
 
-    // Function to open the important modal with slide from top animation
-    function openImportantModal() {
-        ImportantModalBackdrop.classList.remove("hidden");
-        setTimeout(() => {
-            ImportantModalContent.style.transform = "translateY(0)";
-        }, 10);
-    }
+                        $('#cards-container').append(cardHtml);
+                    });
+                } else {
+                    console.error('Gagal memuat notifikasi');
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('Gagal memuat notifikasi');
+            }
+        });
 
-    // Function to close the important modal with slide up animation
-    function closeImportantModal() {
-        ImportantModalContent.style.transform = "translateY(-100%)";
-        setTimeout(() => {
-            ImportantModalBackdrop.classList.add("hidden");
-        }, 500); // Match this duration with the transition duration
-    }
+        // load detail data notifikasi
+        function getNotificationDetails(slug) {
+            $.ajax({
+                url: baseUrl + 'user-notification/' + slug,
+                method: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                },
+                success: function(response) {
+                    console.log(response);
+                    if (response.success) {
+                        var notification = response.data[0].notification;
+                        var createdAt = new Date(notification.created_at).toLocaleDateString('id-ID', {
+                            day: 'numeric',
+                            month: 'long',
+                            year: 'numeric'
+                        });
 
-    // Function to open the urgent modal with slide from top animation
-    function openUrgentModal() {
-        UrgentModalBackdrop.classList.remove("hidden");
-        setTimeout(() => {
-            UrgentModalContent.style.transform = "translateY(0)";
-        }, 10);
-    }
+                        $('#notificationTitle').text(notification.title);
+                        $('#notificationDate').text(createdAt);
+                        $('#notificationDescription').text(notification.description);
+                        if(notification.utd_profile){
+                            $('#utd-name').text(" " + notification.utd_profile.name);
+                            $('#utd-address').text(" " +notification.utd_profile.address);
+                                // Set data-slug pada registerDonorButton
+                            $('#registerDonorButton').data('slug', response.data[0].slug);
+                        }
 
-    // Function to close the urgent modal with slide up animation
-    function closeUrgentModal() {
-        UrgentModalContent.style.transform = "translateY(-100%)";
-        setTimeout(() => {
-            UrgentModalBackdrop.classList.add("hidden");
-        }, 500); // Match this duration with the transition duration
-    }
+                        if (response.data[0].is_approve) {
+                            $('#registerDonorButton').text('Sudah Setuju Mendonor')
+                                .attr('disabled', true)
+                                .attr('class', 'bg-[#797979] mt-2 text-sm text-white px-4 py-2 rounded-xl mt-4  focus:outline-none');
+                                
+                        }
 
-    // Event listener for open general modal button
-    openGeneralModalButton.addEventListener("click", openGeneralModal);
 
-    // Event listener for close general modal button
-    closeGeneralModalButton.addEventListener("click", closeGeneralModal);
+                        var notificationLevelClass = '';
+                        var notificationLevelText = '';
 
-    // Event listener for open important modal button
-    openImportantModalButton.addEventListener("click", openImportantModal);
+                        switch (notification.level) {
+                            case 'urgent':
+                                notificationLevelClass = 'bg-[#BA1D1D]';
+                                notificationLevelText = 'Darurat';
+                                $('.utd-info').show();
+                                $('#registerDonorButton').show();
+                                break;
+                            case 'important':
+                                notificationLevelClass = 'bg-[#e9d525]';
+                                notificationLevelText = 'Penting';
+                                $('.utd-info').hide();
+                                $('#registerDonorButton').hide();
+                                break;
+                            case 'general':
+                                notificationLevelClass = 'bg-[#797979]';
+                                notificationLevelText = 'Umum';
+                                $('.utd-info').hide();
+                                $('#registerDonorButton').hide();
+                                break;
+                            default:
+                                notificationLevelClass = 'bg-[#797979]';
+                                notificationLevelText = 'Umum';
+                                $('.utd-info').hide();
+                                $('#registerDonorButton').hide();
+                                break;
+                        }
 
-    // Event listener for close important modal button
-    closeImportantModalButton.addEventListener("click", closeImportantModal);
+                        $('#notificationLevel').attr('class', notificationLevelClass + ' w-20 text-center text-white font-bold text-sm p-1 shadow rounded-3xl').text(notificationLevelText);
 
-    // Event listener for open urgent modal button
-    openUrgentModalButton.addEventListener("click", openUrgentModal);
+                        $('#detailModalBackdrop').removeClass('hidden').addClass('flex');
 
-    // Event listener for close urgent modal button
-    closeUrgentModalButton.addEventListener("click", closeUrgentModal);
-});
+                        // Hide the modal with animation
+                        setTimeout(function() {
+                            $('#modalContent').removeClass('-translate-y-full').addClass('translate-y-0');
+                        }, 100);
+                    } else {
+                        console.error('Gagal memuat detail notifikasi');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Gagal memuat detail notifikasi');
+                }
+            });
+        }
+
+        // Event listener untuk tombol registerDonorButton
+        $('#registerDonorButton').on('click', function() {
+            var slug = $('#registerDonorButton').data('slug');
+            console.log(slug);
+
+            $.ajax({
+                url: baseUrl + 'user-notification/approve',
+                method: 'PUT',
+                headers: {
+                    'Authorization': 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                data: JSON.stringify({
+                    user_notification_slug: slug
+                }),
+                success: function(response) {
+                    if (response.success) {
+                        $('#detailModalBackdrop').removeClass('flex').addClass('hidden');
+                        toastr.success("Berhasi mendonor sebagai pendonor darurat");
+                    } else {
+                        toastr.error(response.message);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    // Cek apakah ada respons error dari server
+                    if (xhr.responseJSON && xhr.responseJSON.message) {
+                        // Tampilkan pesan error dari server menggunakan Toastr.js
+                        toastr.error(xhr.responseJSON.message);
+                    } else {
+                        // Tampilkan pesan error default
+                        toastr.error('Terjadi kesalahan saat mendaftar. Silahkan Ulangi kembali');
+                    }
+                }
+            });
+        });
+
+
+        // handle klik pada kartu notifikasi
+        $('#cards-container').on('click', '.card-notifikasi', function() { 
+            var slug = $(this).data('slug');
+            getNotificationDetails(slug);
+        });
+
+        // handle klik pada tombol close pada modal
+        $('#closeModal').on('click', function() {
+            $('#detailModalBackdrop').removeClass('flex').addClass('hidden');
+            $('#modalContent').removeClass('translate-y-0').addClass('-translate-y-full');
+        });
+
+    })
 </script>
 @endsection
