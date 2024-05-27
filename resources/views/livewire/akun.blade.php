@@ -198,7 +198,7 @@
     </div>
 
 
-    <div class="flex mt-8">
+    <div class="flex mt-12">
         <div class="flex flex-col">
             <div class="flex">
                 <img id="profilePictureInfo" src="{{ asset('images/avatar_example.svg') }}" alt="Foto Profil"
@@ -239,9 +239,9 @@
                     </div>
                 </div>
             </div>
-
-            <div class="flex justify-between mt-12 ml-10">
-                <div class="flex flex-col gap-10">
+            <div class="border mt-6 ml-10"></div>
+            <div class="flex justify-between mt-6 ml-10">
+                <div class="flex flex-col gap-14">
                     <div class="flex flex-col">
                         <p class="text-[11px] text-gray-500 mb-1">Provinsi</p>
                         <p id="provinceInfo" class="text-sm"></p>
@@ -251,7 +251,7 @@
                         <p id="regencyInfo" class="text-sm"></p>
                     </div>
                 </div>
-                <div class="flex flex-col gap-10">
+                <div class="flex flex-col gap-14">
                     <div class="flex flex-col">
                         <p class="text-[11px] text-gray-500 mb-1">Kecamatan</p>
                         <p id="districtInfo" class="text-sm"></p>
@@ -261,8 +261,8 @@
                         <p id="villageInfo" class="text-sm"></p>
                     </div>
                 </div>
-                <div class="flex flex-col gap-10">
-                    <div class="flex flex-col">
+                <div class="flex flex-col gap-[56px]">
+                    <div class="flex flex-col w-60">
                         <p class="text-[11px] text-gray-500 mb-1">Alamat</p>
                         <p id="addressInfo" class="text-sm"></p>
                     </div>
@@ -271,7 +271,7 @@
                         <p id="citizenNumberInfo" class="text-sm"></p>
                     </div>
                 </div>
-                <div class="flex flex-col gap-10">
+                <div class="flex flex-col gap-14">
                     <div class="flex flex-col">
                         <p class="text-[11px] text-gray-500 mb-1">Golongan Darah</p>
                         <p id="bloodTypeInfo" class="text-sm"></p>
@@ -281,7 +281,7 @@
                         <p id="birthDateInfo" class="text-sm"></p>
                     </div>
                 </div>
-                <div class="flex flex-col gap-10">
+                <div class="flex flex-col gap-14">
                     <div class="flex flex-col">
                         <p class="text-[11px] text-gray-500 mb-1">Kode Donor</p>
                         <p id="donorCodeInfo" class="text-sm"></p>
@@ -356,26 +356,29 @@ $(document).ready(function() {
             longitude = response.data.longitude;
             var birthDate = response.data.birth_date.split('T')[0];
 
-            $('#fullNameInfo').text(response.data.full_name);
-            $('#phoneNumberInfo').text(response.data.phone_number);
-            $('#addressInfo').text(response.data.address);
-            $('#citizenNumberInfo').text(response.data.citizen_number);
-            $('#donorCodeInfo').text(response.data.donor_code);
-            $('#donorPointsInfo').text(response.data.donor_points);
-            $('#rewardPointsInfo').text(response.data.reward_points);
-            $('#birthDateInfo').text(birthDate);
-            $('#rewardPointsInfo').text(response.data.reward_points);
-            $('#usernameInfo').text(response.data.user.username);
-            $('#emailInfo').text(response.data.user.email);
+            $('#fullNameInfo').text(response.data.full_name ?? "-");
+            $('#phoneNumberInfo').text("0" + response.data.phone_number ?? "-");
+            $('#addressInfo').text(response.data.address ?? "-");
+            $('#citizenNumberInfo').text(response.data.citizen_number ?? "-");
+            $('#donorCodeInfo').text(response.data.donor_code ?? "-");
+            $('#donorPointsInfo').text(response.data.donor_points ?? "-");
+            $('#rewardPointsInfo').text(response.data.reward_points ?? "-");
+            $('#birthDateInfo').text(birthDate ?? "-");
+            $('#rewardPointsInfo').text(response.data.reward_points ?? "-");
+            $('#usernameInfo').text(response.data.user.username ?? "-");
+            $('#emailInfo').text(response.data.user.email ?? "-");
 
             if (response.data.profile_picture) {
                 $('#profilePictureInfo').attr('src', response.data.profile_picture);
                 $('#preview_img').attr('src', response.data.profile_picture);
             }
-            if (response.data.blood.rhesus_is_positive) {
+            if (response.data.blood && response.data.blood.rhesus_is_positive) {
                 $('#bloodTypeInfo').text(response.data.blood.blood_type.toUpperCase() + "+");
-            } else {
+            } else if (response.data.blood) {
                 $('#bloodTypeInfo').text(response.data.blood.blood_type.toUpperCase() + "-");
+            } else {
+                $('#bloodTypeInfo').text( "-");
+
             }
 
             var gender = response.data.gender;
@@ -390,7 +393,7 @@ $(document).ready(function() {
 
             // auto-fill informasi pada saat pop-up update dibuka
             $('#fullName').val(response.data.full_name);
-            $('#phoneNumber').val(response.data.phone_number);
+            $('#phoneNumber').val("0" + response.data.phone_number);
             $('#nik').val(response.data.citizen_number);
             $('#donorCode').val(response.data.donor_code);
             $('#birthDate').val(birthDate);
@@ -608,7 +611,7 @@ $(document).ready(function() {
     });
 
 
-    // submi form ubah password
+    // submit form ubah password
     $('#changePasswordForm').submit(function(event) {
         event.preventDefault(); // Mencegah pengiriman form default
 
@@ -641,7 +644,7 @@ $(document).ready(function() {
                     // Tutup modal
                     $('#passwordModalBackdrop').addClass('hidden');
                     // Perbarui halaman
-                    location.reload();
+                    // location.reload();
                 } else {
                     toastr.error(response.message);
                 }

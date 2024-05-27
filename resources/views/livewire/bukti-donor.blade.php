@@ -20,7 +20,7 @@
 
     <div id="cards-container" class="mt-10 p-1 flex flex-col gap-4">
         <div>Total ajuan : <span id="total-riwayat-ajuan"></span></div>
-       {{-- card ajuan riwayat donor --}}
+        {{-- card ajuan riwayat donor --}}
     </div>
 
     <div id="modalBackdrop" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
@@ -67,51 +67,53 @@
 </div>
 
 <script>
-    const baseUrl = 'https://skripsi-kita.my.id/apis/';
-    var token = localStorage.getItem('token');
-    $(document).ready(function() {
-        // load data donor history
-        $.ajax({
-            url: baseUrl + 'donor-history',
-            method: 'GET',
-            headers: {
-                'Authorization': 'Bearer ' + token
-            },
-            success: function(response) {
-                if (response.success) {
-                    // Menampilkan total ajuan
-                    $('#total-riwayat-ajuan').text(response.data.length);
+const baseUrl = 'https://skripsi-kita.my.id/apis/';
+var token = localStorage.getItem('token');
+$(document).ready(function() {
+    // load data donor history
+    $.ajax({
+        url: baseUrl + 'donor-history',
+        method: 'GET',
+        headers: {
+            'Authorization': 'Bearer ' + token
+        },
+        success: function(response) {
+            if (response.success) {
+                // Menampilkan total ajuan
+                $('#total-riwayat-ajuan').text(response.data.length);
 
-                    // sorting data terbaru
-                    response.data.sort(function(a, b) {
-                        return new Date(b.created_at) - new Date(a.created_at);
-                    });
+                // sorting data terbaru
+                response.data.sort(function(a, b) {
+                    return new Date(b.created_at) - new Date(a.created_at);
+                });
 
-                    // Loop melalui setiap item dalam data
-                    response.data.forEach(function(item) {
-                        var statusButtonClass = '';
-                        var statusText = '';
-                        switch(item.status_claim) {
-                            case 'accepted':
-                                statusButtonClass = 'bg-[#14C465]';
-                                statusText = 'Diterima';
-                                break;
-                            case 'pending':
-                                statusButtonClass = 'bg-[#797979]';
-                                statusText = 'Pending';
-                                break;
-                            case 'rejected':
-                                statusButtonClass = 'bg-[#BA1D1D]';
-                                statusText = 'Ditolak';
-                                break;
-                            default:
-                                statusButtonClass = 'bg-[#797979]';
-                                statusText = 'Diproses';
-                        }
-                        
-                        var receiptLink = item.receipt ? `<i class="fa-solid fa-link"></i><a href="${item.receipt}" target="_blank" rel="noopener noreferrer">  ${item.slug}</a>` : '';
+                // Loop melalui setiap item dalam data
+                response.data.forEach(function(item) {
+                    var statusButtonClass = '';
+                    var statusText = '';
+                    switch (item.status_claim) {
+                        case 'accepted':
+                            statusButtonClass = 'bg-[#14C465]';
+                            statusText = 'Diterima';
+                            break;
+                        case 'pending':
+                            statusButtonClass = 'bg-[#797979]';
+                            statusText = 'Pending';
+                            break;
+                        case 'rejected':
+                            statusButtonClass = 'bg-[#BA1D1D]';
+                            statusText = 'Ditolak';
+                            break;
+                        default:
+                            statusButtonClass = 'bg-[#797979]';
+                            statusText = 'Diproses';
+                    }
 
-                        var cardHtml = `
+                    var receiptLink = item.receipt ?
+                        `<i class="fa-solid fa-link"></i><a href="${item.receipt}" target="_blank" rel="noopener noreferrer">  ${item.slug}</a>` :
+                        '';
+
+                    var cardHtml = `
                             <div class="card-ajuan-riwayat-donor bg-[#fbfbfb] shadow-sm shadow-gray-400 p-6 rounded-2xl w-full">
                                 <div class="flex justify-between">
                                     <div class="flex gap-4 items-center">
@@ -130,119 +132,127 @@
                                 </div>
                             </div>
                         `;
-                        
-                        $('#cards-container').append(cardHtml);
+
+                    $('#cards-container').append(cardHtml);
+                });
+
+                // Attach click event handler to the delete buttons
+                $('.delete-button').on('click', function(event) {
+                    event
+                .stopPropagation(); // Prevent the click event from bubbling up to the card
+                    var slug = $(this).data('slug');
+                    $.ajax({
+                        url: baseUrl + 'donor-history/' + slug,
+                        method: 'DELETE',
+                        headers: {
+                            'Authorization': 'Bearer ' + token
+                        },
+                        success: function(response) {
+                            if (response.success) {
+                                // hapus card ajuan dari ui
+                                $(event.target).closest(
+                                    '.card-ajuan-riwayat-donor').remove();
+                                // display ulang total ajuan - 1
+                                var totalCount = parseInt($(
+                                    '#total-riwayat-ajuan').text(), 10);
+                                $('#total-riwayat-ajuan').text(totalCount - 1);
+                                toastr.success('Berhasil dihapus!');
+
+                                // location.reload();
+                            } else {
+                                toastr.error(response.message);
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            // Cek apakah ada respons error dari server
+                            if (xhr.responseJSON && xhr.responseJSON.message) {
+                                // Tampilkan pesan error dari server menggunakan Toastr.js
+                                toastr.error(xhr.responseJSON.message);
+                            } else {
+                                // Tampilkan pesan error default
+                                toastr.error(
+                                    'Terjadi kesalahan saat menghapus ajuan. Silahkan Ulangi kembali'
+                                    );
+                            }
+                        }
                     });
+                });
 
-                    // Attach click event handler to the delete buttons
-                    $('.delete-button').on('click', function(event) {
-                            event.stopPropagation(); // Prevent the click event from bubbling up to the card
-                            var slug = $(this).data('slug');
-                            $.ajax({
-                                url: baseUrl + 'donor-history/' + slug,
-                                method: 'DELETE',
-                                headers: {
-                                    'Authorization': 'Bearer ' + token
-                                },
-                                success: function(response) {
-                                    if (response.success) {
-                                        // hapus card ajuan dari ui
-                                        $(event.target).closest('.card-ajuan-riwayat-donor').remove(); 
-                                        // display ulang total ajuan - 1
-                                        var totalCount = parseInt($('#total-riwayat-ajuan').text(), 10);
-                                        $('#total-riwayat-ajuan').text(totalCount - 1);
-                                        toastr.success('Berhasil dihapus!');
-                                        
-                                        // location.reload();
-                                    } else {
-                                        toastr.error(response.message);
-                                    }
-                                },
-                                error: function(xhr, status, error) {
-                                    // Cek apakah ada respons error dari server
-                                    if (xhr.responseJSON && xhr.responseJSON.message) {
-                                        // Tampilkan pesan error dari server menggunakan Toastr.js
-                                        toastr.error(xhr.responseJSON.message);
-                                    } else {
-                                        // Tampilkan pesan error default
-                                        toastr.error('Terjadi kesalahan saat menghapus ajuan. Silahkan Ulangi kembali');
-                                    }
-                                }
-                            });
-                        });
+            } else {
+                console.error('Failed to load donor history data');
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error('Failed to load donor history data');
+        }
+    });
 
+    // Function to handle form submission for uploading donor proof
+    $('#form-ajuan-bukti-donor').on('submit', function(event) {
+        event.preventDefault(); // Prevent the default form submission
+
+        // Collect form data
+        var donorDate = $('input[name="tanggal_donor"]').val();
+        var description = $('input[name="deskripsi"]').val();
+        var receiptFile = $('input[name="bukti_donor"]')[0].files[0];
+
+        // Create a FormData object and append the file
+        var formData = new FormData();
+        formData.append('donor_date', donorDate);
+        formData.append('description', description);
+        formData.append('receipt', receiptFile);
+
+        // Make AJAX request to upload donor proof
+        $.ajax({
+            url: baseUrl + 'donor-history',
+            method: 'POST',
+            headers: {
+                'Authorization': 'Bearer ' + token
+            },
+            data: formData,
+            contentType: false, // Set contentType to false, as we're sending FormData
+            processData: false, // Set processData to false, as we're sending FormData
+            success: function(response) {
+                if (response.success) {
+                    toastr.success('Berhasil diunggah!');
+                    // Close the modal after successful upload
+                    $('#modalBackdrop').addClass('hidden');
+                    // Reload page
+                    location.reload();
                 } else {
-                    console.error('Failed to load donor history data');
+                    toastr.error(response.message);
                 }
             },
             error: function(xhr, status, error) {
-                console.error('Failed to load donor history data');
+                // Check if there is an error response from the server
+                if (xhr.responseJSON && xhr.responseJSON.message) {
+                    // Display the error message from the server using Toastr.js
+                    toastr.error(xhr.responseJSON.message);
+                } else {
+                    // Display default error message
+                    toastr.error(
+                        'An error occurred while uploading donor proof. Please try again.'
+                        );
+                }
             }
         });
-
-        // Function to handle form submission for uploading donor proof
-        $('#form-ajuan-bukti-donor').on('submit', function(event) {
-            event.preventDefault(); // Prevent the default form submission
-
-            // Collect form data
-            var donorDate = $('input[name="tanggal_donor"]').val();
-            var description = $('input[name="deskripsi"]').val();
-            var receiptFile = $('input[name="bukti_donor"]')[0].files[0];
-
-            // Create a FormData object and append the file
-            var formData = new FormData();
-            formData.append('donor_date', donorDate);
-            formData.append('description', description);
-            formData.append('receipt', receiptFile);
-
-            // Make AJAX request to upload donor proof
-            $.ajax({
-                url: baseUrl + 'donor-history',
-                method: 'POST',
-                headers: {
-                    'Authorization': 'Bearer ' + token
-                },
-                data: formData,
-                contentType: false, // Set contentType to false, as we're sending FormData
-                processData: false, // Set processData to false, as we're sending FormData
-                success: function(response) {
-                    if (response.success) {
-                        toastr.success('Berhasil diunggah!');
-                        // Close the modal after successful upload
-                        $('#modalBackdrop').addClass('hidden');
-                        // Reload page
-                        location.reload();
-                    } else {
-                        toastr.error(response.message);
-                    }
-                },
-                error: function(xhr, status, error) {
-                    // Check if there is an error response from the server
-                    if (xhr.responseJSON && xhr.responseJSON.message) {
-                        // Display the error message from the server using Toastr.js
-                        toastr.error(xhr.responseJSON.message);
-                    } else {
-                        // Display default error message
-                        toastr.error('An error occurred while uploading donor proof. Please try again.');
-                    }
-                }
-            });
-        });
+    });
 
 
-    })
+})
 
-    function formatDate(dateString) {
-        const months = [
-            "Januari", "Februari", "Maret", "April", "Mei", "Juni",
-            "Juli", "Agustus", "September", "Oktober", "November", "Desember"
-        ];
-        const date = new Date(dateString);
-        const day = date.getDate();
-        const month = months[date.getMonth()];
-        const year = date.getFullYear();
-        return `${day} ${month} ${year}`;
-    }
+function formatDate(dateString) {
+    const months = [
+        "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+        "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+    ];
+    const date = new Date(dateString);
+    const day = date.getDate();
+    const month = months[date.getMonth()];
+    const year = date.getFullYear();
+    return `${day} ${month} ${
+        year}`;
+}
 document.addEventListener("DOMContentLoaded", function() {
     const openModalButton = document.getElementById("openModal");
     const closeModalButton = document.getElementById("closeModal");
@@ -253,7 +263,7 @@ document.addEventListener("DOMContentLoaded", function() {
         modalBackdrop.classList.remove("hidden");
     }
 
-    // Function to close the profile edit modal
+    // Function to close the profile edit moda-l
     function closeModal() {
         modalBackdrop.classList.add("hidden");
     }

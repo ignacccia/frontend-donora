@@ -12,9 +12,11 @@
 
     <div>
         <!-- Modal Detail Donor -->
-        <div id="mapModal" class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 overflow-y-auto hidden">
+        <div id="mapModal"
+            class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 overflow-y-auto hidden">
             <div class="relative bg-white rounded-lg p-8 max-w-2xl mx-auto my-8">
-                <button id="closeModalButton" class="absolute top-4 right-4 text-gray-600 hover:text-gray-800 text-2xl" onclick="$('#mapModal').hide()">&times;</button>
+                <button id="closeModalButton" class="absolute top-4 right-4 text-gray-600 hover:text-gray-800 text-2xl"
+                    onclick="$('#mapModal').hide()">&times;</button>
                 <div>
                     <h2 id="donorTitle" class="text-2xl font-bold mb-2">Judul Donor</h2>
                     <div class="flex flex-col text-[12px] text-gray-600">
@@ -30,45 +32,52 @@
                                 <p id="donorAddress">Jl. Contoh No. 123, Surabaya</p>
                             </div>
                         </div>
-                        <div id="donorDescription" class="pt-2">Donor Darah Rutin Juni 2024 dilaksanakan oleh UTD PMI SURABAYA periode Juni 2024. Silahkan lihat lokasinya</div>
+                        <div id="donorDescription" class="pt-2">Donor Darah Rutin Juni 2024 dilaksanakan oleh UTD PMI
+                            SURABAYA periode Juni 2024. Silahkan lihat lokasinya</div>
                     </div>
                     <div class="mt-4">
                         <div id="map" class="w-full h-64"></div>
                     </div>
                     <div class="mt-4">
-                        <a id="googleMapsLink" href="#" target="_blank" class="bg-blue-600 text-white text-[14px] px-2 py-2 rounded-lg hover:bg-blue-800">Buka di Google Maps</a>
-                        <button id="toggleUTDButton" class="bg-[#BA1D1D] text-white text-[14px] px-2 py-2 rounded-lg hover:bg-[#930f0f] ml-2">Lihat Detail UTD PMI</button>
+                        <a id="googleMapsLink" href="#" target="_blank"
+                            class="bg-blue-600 text-white text-[14px] px-2 py-2 rounded-lg hover:bg-blue-800">Buka di
+                            Google Maps</a>
+                        <button id="toggleUTDButton"
+                            class="bg-[#BA1D1D] text-white text-[14px] px-2 py-2 rounded-lg hover:bg-[#930f0f] ml-2">Lihat
+                            Detail UTD PMI</button>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- Modal Detail UTD PMI -->
-        <div id="utdModal" class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 overflow-y-auto hidden">
+        <div id="utdModal"
+            class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 overflow-y-auto hidden">
             <div class="relative bg-white rounded-lg p-8 max-w-2xl mx-auto my-8">
-                <button id="closeUtdModalButton" class="absolute top-4 right-4 text-gray-600 hover:text-gray-800 text-2xl"
-                        onclick="$('#utdModal').hide()">&times;</button>
+                <button id="closeUtdModalButton"
+                    class="absolute top-4 right-4 text-gray-600 hover:text-gray-800 text-2xl"
+                    onclick="$('#utdModal').hide()">&times;</button>
                 <div>
                     <h2 class="text-2xl font-bold">Informasi UTD PMI</h2>
                     <p class="text-[12px] text-gray-600 mb-4">Berikut detail dari UTD PMI terkait</p>
-        
+
                     <p id="utdName" class="text-sm mb-3 font-bold">UTD PMI</p>
-        
+
                     <p class="text-[12px] text-gray-600 mb-1">Email</p>
                     <p id="utdEmail" class="text-sm mb-3"></p>
-        
+
                     <p class="text-[12px] text-gray-600 mb-1">Nomor Telepon</p>
                     <p id="utdPhone" class="text-sm mb-3"></p>
-        
+
                     <p class="text-[12px] text-gray-600 mb-1">Alamat</p>
                     <p id="utdAddress" class="text-sm mb-3"></p>
                     <button id="backToMapButton"
-                            class="bg-blue-600 text-white text-[14px] px-2 py-2 rounded-lg hover:bg-blue-800">Kembali
+                        class="bg-blue-600 text-white text-[14px] px-2 py-2 rounded-lg hover:bg-blue-800">Kembali
                         ke Jadwal Donor</button>
                 </div>
             </div>
         </div>
-   
+
     </div>
 
 </div>
@@ -94,7 +103,8 @@ $(document).ready(function() {
         }).addTo(map);
 
         // Add marker to the map
-        var marker = L.marker([latitude, longitude]).addTo(map).openPopup();
+        var marker = L.marker([latitude, longitude]).addTo(map)
+            .openPopup();
 
         // Adding event listener to prevent popup closure
         marker.on('popupclose', function() {
@@ -103,7 +113,12 @@ $(document).ready(function() {
 
         // Update Google Maps link
         $('#googleMapsLink').attr('href', 'https://www.google.com/maps?q=' + latitude + ',' + longitude);
-        document.getElementById('map').style.height = '250px';
+        document.getElementById('map').style.height = '200px';
+        
+        // Call invalidateSize after a slight delay to ensure map is properly displayed
+        setTimeout(function() {
+            map.invalidateSize();
+        }, 100);
     }
 
     // load all data schedule
@@ -116,14 +131,15 @@ $(document).ready(function() {
                 var container = $(".mt-10.p-1.flex.flex-col.gap-4");
 
                 schedules.forEach(function(schedule) {
-                    let profilePicture = schedule.utd_profile.profile_picture || "{{ asset('images/logo_pmi.png') }}";
+                    let profilePicture = schedule.utd_profile.profile_picture ||
+                        "{{ asset('images/logo_pmi.png') }}";
                     var startDate = new Date(schedule.date_start);
                     var endDate = new Date(schedule.date_end);
-                    var options ={
-                            day: 'numeric',
-                            month: 'long',
-                            year: 'numeric'
-                        };
+                    var options = {
+                        day: 'numeric',
+                        month: 'long',
+                        year: 'numeric'
+                    };
                     var formattedStartDate = startDate.toLocaleDateString('id-ID', options);
                     var formattedEndDate = endDate.toLocaleDateString('id-ID', options);
 
@@ -132,7 +148,7 @@ $(document).ready(function() {
                         dateDisplay = formattedStartDate + ' - ' + formattedEndDate;
                     }
 
-                   
+
                     var timeStart = schedule.time_start.substring(0, 5);
                     var timeEnd = schedule.time_end.substring(0, 5);
                     var slug = schedule.slug; // Ambil slug dari data schedule
@@ -175,27 +191,33 @@ $(document).ready(function() {
                                 var startDate = new Date(data.date_start);
                                 var endDate = new Date(data.date_end);
 
-                                var formattedStartDate = startDate.toLocaleDateString('id-ID', options);
-                                var formattedEndDate = endDate.toLocaleDateString('id-ID', options);
+                                var formattedStartDate = startDate
+                                    .toLocaleDateString('id-ID', options);
+                                var formattedEndDate = endDate
+                                    .toLocaleDateString('id-ID', options);
 
                                 // handle display tanggal jika dilaksanakan pada haru yang sama (satu hari saja)
                                 var dateDisplay = formattedStartDate;
                                 if (startDate.getTime() !== endDate.getTime()) {
-                                    dateDisplay = formattedStartDate + ' - ' + formattedEndDate;
+                                    dateDisplay = formattedStartDate + ' - ' +
+                                        formattedEndDate;
                                 }
 
                                 // Update modal content with response data
                                 $('#mapModal h2').text(data.title);
                                 $('#donorDate').text(dateDisplay);
-                                $('#donorTime').text(data.time_start + ' - ' + data.time_end);
+                                $('#donorTime').text(data.time_start + ' - ' +
+                                    data.time_end);
                                 $('#donorAddress').text(data.address);
 
                                 // update data detail utdpmi
                                 $('#utdName').text(data.utd_profile.name);
-                                $('#utdEmail').text(data.utd_profile.user.email);
-                                $('#utdPhone').text(data.utd_profile.phone_number);
+                                $('#utdEmail').text(data.utd_profile.user
+                                    .email);
+                                $('#utdPhone').text(data.utd_profile
+                                    .phone_number);
                                 $('#utdAddress').text(data.utd_profile.address);
-                                
+
                                 // Initialize map with coordinates from response
                                 initMap(data.latitude, data.longitude);
 
@@ -204,16 +226,16 @@ $(document).ready(function() {
                             }
                         },
                         error: function(xhr, status, error) {
-                            console.error('Failed to load schedule details');
+                            console.error('Gagal memuat data');
                         }
                     });
                 });
             } else {
-                console.error('Failed to load schedule data');
+                console.error('Gagal memuat data');
             }
         },
         error: function(xhr, status, error) {
-            console.error('Failed to load notifications');
+            console.error('Gagal memuat data');
         }
     });
 
@@ -257,6 +279,4 @@ $(document).ready(function() {
 
 });
 </script>
-</script>
-
 @endsection

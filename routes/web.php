@@ -36,12 +36,22 @@ Route::get('/reset-pass', function (Request $request) {
     $email = $request->query('email');
     return view('livewire.reset-pass', compact('email'));
 });
+
 Route::get('/otp', function (Request $request) {
     $email = $request->query('email');
+    $otp = $request->query('otp');
     if (!$email) {
         return redirect('/reset-pass');
     }
     return view('livewire.otp', compact('email'));
+});
+Route::get('/konfirm-pass', function (Request $request) {
+    $email = $request->query('email');
+    $otp = $request->query('otp');
+    if (!$email || !$otp) {
+        return redirect('/reset-pass');
+    }
+    return view('livewire.konfirm-pass', compact('email', 'otp'));
 });
 Route::get('/notifikasi', function () {
     $currentPage = 'notifikasi';
@@ -55,9 +65,7 @@ Route::get('/akun', function () {
     $currentPage = 'akun';
     return view('livewire.akun', compact('currentPage'));
 });
-Route::get('/konfirm-pass', function () {
-    return view('livewire.konfirm-pass');
-});
+
 Route::get('/poin', function () {
     $currentPage = 'poin';
     return view('livewire.poin', compact('currentPage'));

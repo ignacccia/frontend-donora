@@ -8,88 +8,10 @@
         <a class="text-[#3793D5] cursor-pointer hover:underline" href="/klaim-hadiah">tukarkan</a>
         dengan hadiah menarik!
     </p>
-
     <div id="leaderboard" class="mt-10 flex flex-col gap-8">
-        <div id="card-1" class="card bg-[#d42c2c] shadow-md shadow-gray-400 rounded-full cursor-pointer w-full">
-            <div class="flex justify-between">
-                <div class="flex">
-                    <div class="font-bold shadow-lg text-[40px] bg-white text-[#d42c2c] rounded-full px-5">1</div>
-                    <div class="flex ml-4 items-center gap-2">
-                        <img id="profilePictureInfo-1" src="{{ asset('images/avatar_example.svg') }}" alt="Foto Profil"
-                            class="w-[40px] h-[40px] rounded-full shadow">
-                        <div id="username-1" class="text-white text-xl">Username</div>
-                    </div>
-                </div>
-                <div id="points-1" class="text-white text-2xl font-bold mr-6 my-auto">90 Poin</div>
-            </div>
-        </div>
-        <div id="card-2" class="card bg-[#d42c2c] shadow-md shadow-gray-400 rounded-full cursor-pointer w-full">
-            <div class="flex justify-between">
-                <div class="flex">
-                    <div class="font-bold shadow-lg text-[35px] bg-white text-[#d42c2c] rounded-full px-4">2</div>
-                    <div class="flex ml-7 items-center gap-2">
-                        <img id="profilePictureInfo-2" src="{{ asset('images/avatar_example.svg') }}" alt="Foto Profil"
-                            class="w-[35px] h-[35px] rounded-full shadow">
-                        <div id="username-2" class="text-white text-lg">Username</div>
-                    </div>
-                </div>
-                <div id="points-2" class="text-white text-xl font-bold mr-6 my-auto">90 Poin</div>
-            </div>
-        </div>
-        <div id="card-3" class="card bg-[#d42c2c] shadow-md shadow-gray-400 rounded-full cursor-pointer w-full">
-            <div class="flex justify-between">
-                <div class="flex">
-                    <div class="font-bold shadow-lg text-[30px] bg-white text-[#d42c2c] rounded-full px-3">3</div>
-                    <div class="flex ml-10 items-center gap-2">
-                        <img id="profilePictureInfo-3" src="{{ asset('images/avatar_example.svg') }}" alt="Foto Profil"
-                            class="w-[30px] h-[30px] rounded-full shadow">
-                        <div id="username-3" class="text-white text-md">Username</div>
-                    </div>
-                </div>
-                <div id="points-3" class="text-white text-lg font-bold mr-6 my-auto">90 Poin</div>
-            </div>
-        </div>
-        <div id="card-4" class="card bg-[#d42c2c] shadow-md shadow-gray-400 rounded-full cursor-pointer w-full">
-            <div class="flex justify-between">
-                <div class="flex">
-                    <div class="font-bold shadow-lg text-[25px] bg-white text-[#d42c2c] rounded-full px-3">4</div>
-                    <div class="flex ml-[45px] items-center gap-2">
-                        <img id="profilePictureInfo-4" src="{{ asset('images/avatar_example.svg') }}" alt="Foto Profil"
-                            class="w-[25px] h-[25px] rounded-full shadow">
-                        <div id="username-4" class="text-white text-sm">Username</div>
-                    </div>
-                </div>
-                <div id="points-4" class="text-white text-md font-bold mr-6 my-auto">90 Poin</div>
-            </div>
-        </div>
-        <div id="card-5" class="card bg-[#d42c2c] shadow-md shadow-gray-400 rounded-full cursor-pointer w-full">
-            <div class="flex justify-between">
-                <div class="flex">
-                    <div class="font-bold shadow-lg text-[20px] bg-white text-[#d42c2c] rounded-full px-2.5">5</div>
-                    <div class="flex ml-[52px] items-center gap-2">
-                        <img id="profilePictureInfo-5" src="{{ asset('images/avatar_example.svg') }}" alt="Foto Profil"
-                            class="w-[20px] h-[20px] rounded-full shadow">
-                        <div id="username-5" class="text-white text-[12px]">Username</div>
-                    </div>
-                </div>
-                <div id="points-5" class="text-white text-[12px] font-bold mr-6 my-auto">90 Poin</div>
-            </div>
-        </div>
+        <!-- Cards will be dynamically inserted here by the AJAX call -->
     </div>
 </div>
-
-<style>
-.card {
-    opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 3s ease, transform 3s ease;
-}
-
-.card.show {
-    opacity: 1;
-    transform: translateY(0);
-}
-</style>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
@@ -97,33 +19,130 @@ const baseUrl = 'https://skripsi-kita.my.id/apis/';
 var token = localStorage.getItem('token');
 
 $(document).ready(function() {
+    let currentUserID;
+
+    // Get the current user's profile
     $.ajax({
-        url: baseUrl + 'profile/user/get-all-by-donor-points',
+        url: baseUrl + 'profile/user',
         method: 'GET',
         headers: {
             'Authorization': 'Bearer ' + token
         },
         success: function(response) {
             if (response.success) {
-                // Sort data based on donor_points in descending order
-                const users = response.data.sort((a, b) => b.donor_points - a.donor_points);
-
-                // Update card content for the top 5 users
-                users.slice(0, 5).forEach((user, index) => {
-                    setTimeout(() => {
-                        $(`#username-${index + 1}`).text(user.username);
-                        $(`#points-${index + 1}`).text(`${user.donor_points} Poin`);
-                        $(`#profilePictureInfo-${index + 1}`).attr('src', user.profile_picture ? user.profile_picture : '{{ asset('images/avatar_example.svg') }}');
-                        $(`#card-${index + 1}`).addClass('show');
-                    }, 500 * index); // Delay each card appearance by 500 milliseconds
-                });
+                currentUserID = response.data.id;
+                loadLeaderboard(currentUserID);
             }
         },
         error: function(error) {
-            console.error('Kesalahan saat menampilkan leaderboard:', error);
+            console.error('Kesalahan saat mengambil profil pengguna:', error);
         }
     });
+
+    function determineLevel(points) {
+        if (points >= 0 && points <= 20) return 'Relawan Darah';
+        if (points >= 21 && points <= 40) return 'Ksatria Darah';
+        if (points >= 41 && points <= 60) return 'Kapten Darah';
+        if (points >= 61 && points <= 80) return 'Jenderal Darah';
+        if (points >= 81 && points <= 100) return 'Raja Darah';
+        if (points >= 101 && points <= 120) return 'Dewa Darah';
+        return 'Tidak Diketahui'; // Fallback for unexpected points
+    }
+
+    function loadLeaderboard(currentUserID) {
+        $.ajax({
+            url: baseUrl + 'profile/user/get-all-by-donor-points',
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + token
+            },
+            success: function(response) {
+                if (response.success) {
+                    const users = response.data.sort((a, b) => b.donor_points - a.donor_points);
+                    const leaderboardContainer = $('#leaderboard');
+
+                    // Clear existing leaderboard content
+                    leaderboardContainer.empty();
+
+                    // Loop through sorted users and create leaderboard cards
+                    users.forEach((user, index) => {
+                        const profilePicture = user.profile_picture || "{{ asset('images/avatar_example.svg') }}";
+                        const position = index + 1;
+                        const isCurrentUser = user.id === currentUserID;
+                        const cardBackground = isCurrentUser ? 'bg-[#b71c1c]' : 'bg-[#d42c2c]';
+                        const level = determineLevel(user.donor_points);
+
+                        let card = '';
+                        if (position <= 5) {
+                            // Top 5 cards
+                            card = `
+                                <div class="card-leader-board ${cardBackground} shadow-md shadow-gray-400 rounded-full cursor-pointer w-full transition-transform duration-500 ${isCurrentUser ? 'focused-card' : ''}" id="user-${user.id}">
+                                    <div class="flex justify-between">
+                                        <div class="flex items-center">
+                                            <div class="flex items-center justify-center font-bold ${position === 1 ? 'text-[40px]' : position === 2 ? 'text-[35px]' : position === 3 ? 'text-[30px]' : position === 4 ? 'text-[25px]' : 'text-[20px]'} bg-white text-[#d42c2c] rounded-full px-${position === 1 ? '5' : position === 2 ? '4' : position === 3 ? '3' : '2.5'}">${position}</div>
+                                            <div class="flex ml-${position === 1 ? '4' : position === 2 ? '7' : position === 3 ? '10' : position === 4 ? '[45px]' : '[52px]'} items-center gap-2">
+                                                <div class="w-[${position === 1 ? '40' : position === 2 ? '35' : position === 3 ? '30' : position === 4 ? '25' : '20'}px] h-[${position === 1 ? '40' : position === 2 ? '35' : position === 3 ? '30' : position === 4 ? '25' : '20'}px] rounded-full overflow-hidden shadow">
+                                                    <img src="${profilePicture}" alt="Foto Profil" class="object-cover w-full h-full">
+                                                </div>
+                                                <div class="text-white ${position === 1 ? 'text-xl' : position === 2 ? 'text-lg' : position === 3 ? 'text-md' : position === 4 ? 'text-sm' : 'text-[12px]'}">${user.username}</div>
+                                                <div class="text-white text-sm">(${level})</div>
+                                            </div>
+                                        </div>
+                                        <div class="text-white ${position === 1 ? 'text-2xl' : position === 2 ? 'text-xl' : position === 3 ? 'text-lg' : position === 4 ? 'text-md' : 'text-[12px]'} font-bold mr-6 my-auto">${user.donor_points ?? 0} Poin</div>
+                                    </div>
+                                </div>
+                            `;
+                        } else {
+                            // Cards for positions 6 and below, same as position 5
+                            card = `
+                                <div class="card-leader-board ${cardBackground} shadow-md shadow-gray-400 rounded-full cursor-pointer w-full transition-transform duration-500 ${isCurrentUser ? 'focused-card' : ''}" id="user-${user.id}">
+                                    <div class="flex justify-between">
+                                        <div class="flex items-center">
+                                            <div class="flex items-center justify-center font-bold text-[20px] bg-white text-[#d42c2c] rounded-full px-2.5">${position}</div>
+                                            <div class="flex ml-[52px] items-center gap-2">
+                                                <div class="w-[20px] h-[20px] rounded-full overflow-hidden shadow">
+                                                    <img src="${profilePicture}" alt="Foto Profil" class="object-cover w-full h-full">
+                                                </div>
+                                                <div class="text-white text-[12px]">${user.username}</div>
+                                                <div class="text-white text-sm">(${level})</div>
+                                            </div>
+                                        </div>
+                                        <div class="text-white text-[12px] font-bold mr-6 my-auto">${user.donor_points ?? 0} Poin</div>
+                                    </div>
+                                </div>
+                            `;
+                        }
+
+                        // Append card to leaderboard container
+                        leaderboardContainer.append(card);
+                    });
+
+                    // Add animation class to all cards
+                    $('.card-leader-board').each(function(index) {
+                        $(this).css('opacity', '0');
+                        $(this).delay(200 * index).animate({ opacity: 1 }, 500);
+                    });
+
+                    // Scroll to current user's card if it's the current user
+                    if ($('.focused-card').length) {
+                        const offsetTop = $('.focused-card').offset().top;
+                        const padding = $(window).height() / 2 - $('.focused-card').height() / 2;
+                        $('html, body').animate({
+                            scrollTop: offsetTop - padding
+                        }, 1000, function() {
+                            // Add zoom animation to current user's card
+                            $('.focused-card').addClass('transform scale-110').delay(2000).queue(function() {
+                                $(this).removeClass('transform scale-110').dequeue();
+                            });
+                        });
+                    }
+                }
+            },
+            error: function(error) {
+                console.error('Kesalahan saat menampilkan leaderboard:', error);
+            }
+        });
+    }
 });
 </script>
-
 @endsection

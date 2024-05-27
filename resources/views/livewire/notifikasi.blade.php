@@ -4,7 +4,7 @@
 <div class="bg-white rounded-2xl p-6 mt-4 flex flex-col shadow-lg z-10">
 
     <p class="font-semibold text-3xl text-[#172B4D] drop-shadow">Notifikasi</p>
-    <p class="text-sm mt-2">Tekan notifikasi untuk melihat detail informasi dan menjadi pendonor darurat</p>
+    <p class="text-[12px] mt-2">Cek notifikasi secara berkala untuk mendapatkan informasi terkini dan tekan notifikasi untuk melihat detail informasi dan menjadi pendonor darurat.</p>
 
     <div id="cards-container" class="mt-10 p-1 flex flex-col gap-4">
         {{-- <div class="card-notifikasi bg-[#fbfbfb] shadow-sm shadow-gray-400 pt-4 pb-4 pl-6 pr-6 rounded-2xl cursor-pointer w-full hover:bg-[#f1f1f1]">

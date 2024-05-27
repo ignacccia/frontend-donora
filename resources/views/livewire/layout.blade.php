@@ -78,10 +78,61 @@
         font-size: 10px;
         color: #666;
     }
+
+    /* Gaya untuk modal konfirmasi logout */
+    #logoutModal {
+        /* Sesuaikan dengan preferensi Anda */
+        width: 400px;
+        max-width: 90%;
+        background-color: #fff;
+        padding: 1.5rem;
+        border-radius: 1rem;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        z-index: 100;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    /* Gaya untuk tombol close modal */
+    #btnCloseModal {
+        cursor: pointer;
+    }
+
+    /* Gaya untuk overlay latar belakang */
+    #overlay {
+        /* Atur opacity dan warna latar belakang */
+    }
     </style>
 </head>
 
 <body class="flex mb-6">
+    <!-- Modal Konfirmasi Logout -->
+    <div id="logoutModal"
+        class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-8 rounded-2xl shadow-md z-50 hidden">
+        <div class="flex justify-between mb-4">
+            <h1 class="text-lg font-semibold">Konfirmasi Logout</h1>
+            <button id="btnCloseModal" class="text-gray-500 hover:text-gray-500 focus:outline-none">
+                <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                    </path>
+                </svg>
+            </button>
+        </div>
+        <p>Anda yakin ingin keluar dari akun?</p>
+        <div class="flex justify-end mt-6">
+            <button id="logoutConfirm"
+                class="bg-[#d42c2c] text-white px-6 py-2 text-sm font-bold rounded-xl mr-4 hover:bg-[#a11f1f]">Ya</button>
+            <button id="logoutCancel"
+                class="bg-gray-200 text-gray-800 px-6 py-2 text-sm font-bold rounded-xl hover:bg-gray-300">Batal</button>
+        </div>
+    </div>
+
+    <!-- Overlay untuk latar belakang modal -->
+    <div id="overlay" class="fixed top-0 left-0 w-full h-full bg-gray-800 opacity-50 z-50 hidden"></div>
+
 
     <div id="loader">
         <img src="{{ asset('images/donora.svg') }}" alt="Loading...">
@@ -242,7 +293,7 @@
 
         // cek apakah token available (jika tidak redirect ke login)
         var token = localStorage.getItem('token');
-        var baseUrl = 'https://skripsi-kita.my.id/apis/'
+        var baseUrl = 'https://skripsi-kita.my.id/apis/';
         if (!token) {
             // Tampilkan loader saat proses redirect
             window.location.href = '/masuk';
@@ -276,34 +327,51 @@
 
         });
 
+        // Modal Logout
+        $('#logout-button').click(function() {
+            openLogoutModal();
+        });
 
-        // saat tombol keluar di klik
-        $('#logout-button').click(function(event) {
-            event.preventDefault();
+        function openLogoutModal() {
+            $('#logoutModal').removeClass('hidden');
+            $('#overlay').removeClass('hidden');
+        }
 
-            if (token) {
-                $.ajax({
-                    url: baseUrl + 'auth/logout',
-                    method: 'POST',
-                    headers: {
-                        'Authorization': 'Bearer ' + token,
-                        'Content-Type': 'application/json'
+        // Tambahkan fungsi untuk menutup modal konfirmasi logout
+        $('#btnCloseModal').click(function() {
+            closeModal();
+        });
 
-                        // 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    success: function(response) {
-                        console.log(response.message);
-                        localStorage.removeItem('token');
-                        window.location.href = '/masuk';
-                    },
-                    error: function(xhr, status, error) {
-                        console.error('Terjadi Kesalahan:', error);
-                        alert('Terjadi Kesalahan');
-                    }
-                });
-            } else {
-                window.location.href = '/login';
-            }
+        // Tambahkan fungsi untuk menutup modal konfirmasi logout
+        $('#logoutCancel').click(function() {
+            closeModal();
+        });
+
+        // Fungsi untuk menutup modal konfirmasi logout
+        function closeModal() {
+            $('#logoutModal').addClass('hidden');
+            $('#overlay').addClass('hidden');
+        }
+
+        // Fungsi untuk logout ketika tombol "Keluar" di dalam modal diklik
+        $('#logoutConfirm').click(function() {
+            $.ajax({
+                url: baseUrl + 'auth/logout',
+                method: 'POST',
+                headers: {
+                    'Authorization': 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                success: function(response) {
+                    console.log(response.message);
+                    localStorage.removeItem('token');
+                    window.location.href = '/masuk';
+                },
+                error: function(xhr, status, error) {
+                    console.error('Terjadi Kesalahan:', error);
+                    alert('Terjadi Kesalahan');
+                }
+            });
         });
 
         // Sembunyikan loader setelah halaman sepenuhnya dimuat
@@ -312,6 +380,8 @@
         });
     });
     </script>
+
+
 </body>
 
 

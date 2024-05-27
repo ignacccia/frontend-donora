@@ -67,7 +67,7 @@
                         }
                         
                         var cardHtml = `
-                            <div class="card-ajuan-riwayat bg-[#fbfbfb] shadow-sm shadow-gray-400 pt-4 pb-4 pl-6 pr-6 rounded-2xl cursor-pointer w-full hover:bg-[#f1f1f1]">
+                            <div class="card-ajuan-riwayat bg-[#fbfbfb] shadow-sm shadow-gray-400 pt-4 pb-4 pl-6 pr-6 rounded-2xl w-full hover:bg-[#f1f1f1]">
                                 <div class="flex justify-between">
                                     <div class="flex flex-col">
                                         <div class="text-gray-700 text-xl font-bold">${item.patient_name}</div>
@@ -79,7 +79,7 @@
                                         <button class="${statusButtonClass} w-20 py-2 text-center text-white text-sm shadow rounded-3xl font-bold">
                                             ${statusText}
                                         </button>
-                                        <button class="text-gray-700 delete-button" data-slug="${item.slug}"><i class="fa-solid fa-trash"></i></button>                                    </div>
+                                        <button class="text-gray-700 delete-button cursor-pointer" data-slug="${item.slug}"><i class="fa-solid fa-trash"></i></button>                                    </div>
                                 </div>
                             </div>
                         `;                        

@@ -4,7 +4,6 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
     <title>DONORA</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -32,7 +31,7 @@
                 <div class="w-4/5 md:w-3/4 lg:w-2/3 border border-[#f6f6f6] mt-4 mb-6"></div>
             </div>
 
-            <div class="mb-2">
+            <div class="mb-4">
                 <label for="new-password" class="block text-gray-700 text-[12px] font-bold mb-2">Masukkan Kata Sandi
                     Baru</label>
                 <input id="new-password" class="form-input w-full border border-gray-300 rounded-xl py-3 px-3 text-sm"
@@ -47,13 +46,18 @@
                     placeholder="Konfirmasi Kata Sandi" type="password">
             </div>
 
-            <div class="mb-2">
+            <div class="">
                 <input id="email" class="form-input w-full border border-gray-300 rounded-xl py-3 px-3 text-sm"
-                    placeholder="Masukkan email terdaftar anda" hidden>
+                    placeholder="Masukkan email terdaftar anda" value="{{ $email }}" hidden>
+            </div>
+
+            <div class="">
+                <input id="otp" class="form-input w-full border border-gray-300 rounded-xl py-3 px-3 text-sm"
+                    placeholder="Masukkan otp terdaftar anda" value="{{ $otp }}" hidden>
             </div>
 
             <div class="mb-2">
-                <input id="otp" class="form-input w-full border border-gray-300 rounded-xl py-3 px-3 text-sm"
+                <input id="" class="form-input w-full border border-gray-300 rounded-xl py-3 px-3 text-sm"
                     placeholder="Masukkan OTP" hidden>
             </div>
 
@@ -64,15 +68,26 @@
     </div>
 
 </body>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 $(document).ready(function() {
     $('#submit-button').click(function(event) {
+        var baseUrl = 'https://skripsi-kita.my.id/apis/';
+
         event.preventDefault();
 
         var email = $('#email').val();
         var newPassword = $('#new-password').val();
         var confirmPassword = $('#confirm-password').val();
         var token = $('#otp').val();
+
+
+        console.log("Email: " + email);
+        console.log("New Password: " + newPassword);
+        console.log("Confirm Password: " + confirmPassword);
+        console.log("Token: " + token);
+
+
 
         var requestData = {
             email: email,
@@ -82,13 +97,15 @@ $(document).ready(function() {
         };
 
         $.ajax({
-            url: 'https://skripsi-kita.my.id/auth/reset-password',
+            url: baseUrl + 'auth/reset-password',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(requestData),
             success: function(response) {
                 console.log('Success:', response);
-                // Handle success - maybe display a message or redirect
+                setTimeout(function() {
+                    window.location.href = '/masuk'; // Redirect to the /masuk page
+                }, 2000); // Adjust the delay as needed
             },
             error: function(xhr, status, error) {
                 console.error('Error:', error);

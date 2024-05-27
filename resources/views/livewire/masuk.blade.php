@@ -16,6 +16,7 @@
         href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
         rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
     @vite('resources/css/app.css')
 </head>
 
@@ -26,17 +27,7 @@
             alt="Donora">
 
         <div
-            class="bg-white flex flex-col w-4/5 md:w-1/2 lg:w-1/3 rounded-[45px] shadow-md shadow-gray-500 justify-center mt-4 p-6">
-            <p class="font-semibold text-center text-md">Masuk dengan</p>
-            <div class="bg-white mx-auto p-4 rounded-xl shadow shadow-gray-300 border border-gray-100 mt-2">
-                <img src="{{ asset('images/google.svg') }}" alt="Google" class="h-4 w-4">
-            </div>
-
-            <div class="flex justify-center">
-                <div class="w-4/5 md:w-3/4 lg:w-2/3 border border-[#f9f9f9] mt-4 "></div>
-            </div>
-            <p class="text-[12px] font-bold text-[#8392AB] text-center mt-4">atau</p>
-
+            class="bg-white flex flex-col w-4/5 md:w-1/2 lg:w-1/3 rounded-[45px] shadow-md shadow-gray-500 justify-center mt-4 p-12">
             <form id="login-form">
                 <div class="mb-4">
                     <label for="email" class="block text-gray-700 text-[12px] font-bold mb-2">Email/Username</label>
@@ -63,6 +54,7 @@
 
 </body>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
 <script>
 $(document).ready(function() {
     $('#login-form').submit(function(event) {
@@ -91,8 +83,14 @@ $(document).ready(function() {
                 }
             },
             error: function(xhr, status, error) {
-                console.error('Error:', error);
-                atoastr.error('Terjadi kesalahan saat masuk');
+                // Cek apakah ada respons error dari server
+                if (xhr.responseJSON && xhr.responseJSON.message) {
+                    // Tampilkan pesan error dari server menggunakan Toastr.js
+                    toastr.error(xhr.responseJSON.message);
+                } else {
+                    // Tampilkan pesan error default
+                    toastr.error('Terjadi kesalahan saat menghapus ajuan. Silahkan Ulangi kembali');
+                }
             }
         });
     });
